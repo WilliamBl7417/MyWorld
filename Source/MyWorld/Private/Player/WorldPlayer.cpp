@@ -18,8 +18,9 @@ AWorldPlayer::AWorldPlayer()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom);
 
-	CameraBoom->bUsePawnControlRotation = true;
-	FollowCamera->bUsePawnControlRotation = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 
 }
 
