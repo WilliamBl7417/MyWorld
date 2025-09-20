@@ -56,9 +56,9 @@ void AWorldPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComp->BindAction(LookAction, ETriggerEvent::Triggered, this, &AWorldPlayer::LookEvent);
 		EnhancedInputComp->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AWorldPlayer::InteractEvent);
 		EnhancedInputComp->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AWorldPlayer::JumpEvent);
+		EnhancedInputComp->BindAction(RunAction, ETriggerEvent::Triggered, this, &AWorldPlayer::RunEvent);
 
 	}
-
 }
 
 void AWorldPlayer::MoveEvent(const FInputActionValue& Value)
@@ -102,5 +102,11 @@ void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Jump Event Triggered"));
 	}
 }
+
+void AWorldPlayer::RunEvent(const FInputActionValue& Value)
+{
+}
+
+
 
 

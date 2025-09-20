@@ -29,6 +29,8 @@ public:
 	void LookEvent(const FInputActionValue& Value);
 	void InteractEvent(const FInputActionValue& Value);
 	void JumpEvent(const FInputActionValue& Value);
+	void RunEvent(const FInputActionValue& Value);
+
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputMappingContext* PlayerMappingContext;
@@ -41,7 +43,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* InteractAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* JumpAction;
+	UInputAction* JumpAction;	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* RunAction;
+
 
 	/* Camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
