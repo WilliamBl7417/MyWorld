@@ -9,6 +9,7 @@ class UInputMappingContext;
 class UInputAction;
 class UCameraComponent;
 class USpringArmComponent;
+class ACharacter;
 
 UCLASS()
 class MYWORLD_API AWorldPlayer : public ACharacter
@@ -29,7 +30,16 @@ public:
 	void LookEvent(const FInputActionValue& Value);
 	void InteractEvent(const FInputActionValue& Value);
 	void JumpEvent(const FInputActionValue& Value);
-	void RunEvent(const FInputActionValue& Value);
+
+	void RunStart(const FInputActionValue& Value);
+	void RunStop(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void RunStartBP();
+	void RunStartBP_Implementation();
+	UFUNCTION(BlueprintNativeEvent)
+	void RunStopBP();
+	void RunStopBP_Implementation();
 
 
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -47,6 +57,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* RunAction;
 
+	ACharacter* PlayerCharacter;
 
 	/* Camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
@@ -54,9 +65,25 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 
+
 	UPROPERTY(EditAnywhere, Category = "Player Properties|Camera")
 	float LookSensitivity = 1.0f;
 
+	/* Variables */
+
+	// Velocidades
+	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
+	float WalkSpeed = 300.f;
+	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
+	float RunSpeed = 600.f;
+	UPROPERTY(VisibleAnywhere, Category = "Player Properties|Movement")
+	float CurrentSpeed = 300.f;
+
+	// Control de aceleración
+	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
+	float SpeedInterpRate = 5.f; 
+
+	bool bIsRunning = false;
 
 
 protected:

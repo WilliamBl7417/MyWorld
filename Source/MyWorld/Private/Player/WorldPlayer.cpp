@@ -6,6 +6,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 AWorldPlayer::AWorldPlayer()
 {
  	
@@ -35,17 +37,21 @@ void AWorldPlayer::BeginPlay()
 		{
 			Subsystem->AddMappingContext(PlayerMappingContext, 0);
 		}
-
 	}
-	
+	PlayerCharacter = Cast<ACharacter>(this);	
 }
 
 void AWorldPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
+	float TargetSpeed = bIsRunning ? RunSpeed : WalkSpeed;
 
+	CurrentSpeed = FMath::FInterpTo(CurrentSpeed, TargetSpeed, DeltaTime, SpeedInterpRate);
+
+	PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+
+}
 
 void AWorldPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -54,9 +60,10 @@ void AWorldPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	{
 		EnhancedInputComp->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AWorldPlayer::MoveEvent);
 		EnhancedInputComp->BindAction(LookAction, ETriggerEvent::Triggered, this, &AWorldPlayer::LookEvent);
-		EnhancedInputComp->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AWorldPlayer::InteractEvent);
+		EnhancedInputComp->BindAction(InteractAction, ETriggerEvent::Started, this, &AWorldPlayer::InteractEvent);
 		EnhancedInputComp->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AWorldPlayer::JumpEvent);
-		EnhancedInputComp->BindAction(RunAction, ETriggerEvent::Triggered, this, &AWorldPlayer::RunEvent);
+		EnhancedInputComp->BindAction(RunAction, ETriggerEvent::Triggered, this, &AWorldPlayer::RunStart);
+		EnhancedInputComp->BindAction(RunAction, ETriggerEvent::Completed, this, &AWorldPlayer::RunStop);
 
 	}
 }
@@ -88,6 +95,7 @@ void AWorldPlayer::LookEvent(const FInputActionValue& Value)
 
 void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 {
+
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Interact Event Triggered"));
@@ -103,8 +111,25 @@ void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
 	}
 }
 
-void AWorldPlayer::RunEvent(const FInputActionValue& Value)
+void AWorldPlayer::RunStart(const FInputActionValue& Value)
 {
+	RunStartBP();
+}
+
+void AWorldPlayer::RunStop(const FInputActionValue& Value)
+{
+	RunStopBP();
+}
+
+void AWorldPlayer::RunStartBP_Implementation()
+{
+	bIsRunning = true;
+}
+
+void AWorldPlayer::RunStopBP_Implementation()
+{
+	bIsRunning = false;
+
 }
 
 
