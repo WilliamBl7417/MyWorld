@@ -11,6 +11,8 @@ class UCameraComponent;
 class USpringArmComponent;
 class ACharacter;
 class UCapsuleComponent;
+class UStaticMeshComponent;
+class USkeletalMeshComponent;
 
 UCLASS()
 class MYWORLD_API AWorldPlayer : public ACharacter
@@ -83,6 +85,16 @@ public:
 	UCameraComponent* FollowCamera;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UCapsuleComponent* CapsuleOverlap;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	USkeletalMeshComponent* ClothesMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* EyesMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* ULib;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* DLib;
+
 
 	/* Variables */
 

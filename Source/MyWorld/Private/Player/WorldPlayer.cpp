@@ -10,6 +10,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Interfaces/TouchingInterface.h"
 
+
 AWorldPlayer::AWorldPlayer()
 {
  	
@@ -24,6 +25,16 @@ AWorldPlayer::AWorldPlayer()
 
 	CapsuleOverlap = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleOverlap"));
 	CapsuleOverlap->SetupAttachment(RootComponent);
+
+	ClothesMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ClothesMesh"));
+	ClothesMesh->SetupAttachment(GetMesh());
+
+	EyesMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyesMesh"));
+	EyesMesh->SetupAttachment(GetMesh());
+	ULib = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeULib"));
+	ULib->SetupAttachment(GetMesh());
+	DLib = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeDLib"));
+	DLib->SetupAttachment(GetMesh());
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
