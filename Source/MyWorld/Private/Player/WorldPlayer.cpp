@@ -29,13 +29,6 @@ AWorldPlayer::AWorldPlayer()
 	ClothesMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ClothesMesh"));
 	ClothesMesh->SetupAttachment(GetMesh());
 
-	//EyesMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyesMesh"));
-	//EyesMesh->SetupAttachment(GetMesh(), TEXT("SocketName"));
-	//ULib = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeULib"));
-	//ULib->SetupAttachment(GetMesh(), TEXT("SocketName"));
-	//DLib = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeDLib"));
-	//DLib->SetupAttachment(GetMesh(), TEXT("SocketName"));
-
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
