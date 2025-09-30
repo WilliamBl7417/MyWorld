@@ -88,14 +88,6 @@ public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	USkeletalMeshComponent* ClothesMesh;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* EyesMesh;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* ULib;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* DLib;
-
-
 	/* Variables */
 
 	/* Camera Variables */
