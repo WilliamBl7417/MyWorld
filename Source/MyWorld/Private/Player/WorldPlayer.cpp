@@ -39,7 +39,7 @@ AWorldPlayer::AWorldPlayer()
 	CapsuleOverlap->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECR_Overlap); // Overlap con WorldDynamic
 	CapsuleOverlap->SetGenerateOverlapEvents(true);
 
-	WalkSpeed = 300.f;
+	WalkSpeed = 200.f;
 	RunSpeed = 600.f;
 	CurrentSpeed = 300.f;
 	SpeedInterpRate = 5.f;
