@@ -129,7 +129,6 @@ void AWorldPlayer::LookEvent(const FInputActionValue& Value)
 		// Add yaw (left/right) input
 		AddControllerYawInput(LookAxisVector.X * LookSensitivity);
 
-		// Add pitch (up/down) input
 		AddControllerPitchInput(LookAxisVector.Y * LookSensitivity);
 	}
 }

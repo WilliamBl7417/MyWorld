@@ -94,10 +94,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Player Properties|Camera")
 	float LookSensitivity = 1.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Camera")
+	float MinCameraPitch = -60.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Camera")
+	float MaxCameraPitch = 45.0f;
+
 	/* Movement Variables */
-	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
+	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Movement")
 	float WalkSpeed;
-	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
+	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Movement")
 	float RunSpeed;
 	UPROPERTY(VisibleAnywhere, Category = "Player Properties|Movement")
 	float CurrentSpeed;
