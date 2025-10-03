@@ -9,6 +9,7 @@
 
 class UStaticMeshComponent;
 class USkeletalMeshComponent;
+class USceneComponent;
 class UBoxComponent;
 
 UCLASS()
@@ -35,13 +36,19 @@ public:
 	/*Variables*////
 
 	/* Components*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	USceneComponent* RootComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* SkeletalMeshComp;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* StaticMeshComp;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UBoxComponent* BoxComp;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMesh* StaticMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	USkeletalMesh* SkeletalMesh;
 
 
 

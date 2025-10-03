@@ -11,8 +11,12 @@ AInteractItem::AInteractItem()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
+	RootComponent = RootComp;
+
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
-	RootComponent = BoxComp;
+	BoxComp->SetupAttachment(RootComponent);
 
 	SkeletalMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 	SkeletalMeshComp->SetupAttachment(RootComponent);
