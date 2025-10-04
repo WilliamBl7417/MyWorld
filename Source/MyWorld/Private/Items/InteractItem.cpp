@@ -6,14 +6,13 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 
-// Sets default values
+
 AInteractItem::AInteractItem()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
-	RootComponent = RootComp;
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
+	RootComponent = SceneComponent;
 
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
 	BoxComp->SetupAttachment(RootComponent);
@@ -24,6 +23,8 @@ AInteractItem::AInteractItem()
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComp"));
 	StaticMeshComp->SetupAttachment(RootComponent);
 
+	ShadowMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShadowMeshComp"));
+	ShadowMeshComp->SetupAttachment(StaticMeshComp);
 
 }
 
@@ -33,21 +34,29 @@ void AInteractItem::TouchingBP_Implementation()
 	//also i can leave it empty and just implement the logic in blueprint
 }
 
-
-
-
-
-// Called when the game starts or when spawned
 void AInteractItem::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
+void AInteractItem::DebugMes(int32 Key, FString Message, FColor Color, float Duration)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(Key, Duration, Color, Message);
+	}
+}
+
 void AInteractItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	DeltaSeconds = DeltaTime;
+}
+
+void AInteractItem::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
 
 }
 

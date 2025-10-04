@@ -12,6 +12,7 @@ class USkeletalMeshComponent;
 class USceneComponent;
 class UBoxComponent;
 
+
 UCLASS()
 class MYWORLD_API AInteractItem : public AActor, public ITouchingInterface
 {
@@ -24,41 +25,44 @@ public:
 	AInteractItem();
 
 	/* Interface implementation*/
-
 	virtual void TouchingBP_Implementation() override;
 
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 	/*Internal Functions*/
+
 	virtual void Tick(float DeltaTime) override;
 
 	/*Functions*///
 
-
 	/*Variables*////
-
 	/* Components*/
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	USceneComponent* RootComp;
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Components")
+	USceneComponent* SceneComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* SkeletalMeshComp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* StaticMeshComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* ShadowMeshComp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UBoxComponent* BoxComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 	UStaticMesh* StaticMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
+	float DeltaSeconds;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMesh* SkeletalMesh;
 
-
-
-
-
 protected:
-	/*Functions*/
 
+	/*Functions*/
 	/*Internal functions*/
 	virtual void BeginPlay() override;
+	void DebugMes(int32 Key, FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
 
 public:	
 
