@@ -19,15 +19,14 @@ public:
 	/*Functions*/
 	ARock();
 
-	virtual void OnConstruction(const FTransform& Transform) override;
 	/*Functions*/
 
 	/*Variables*/
 
-	UPROPERTY()
-	FVector StaticMeshScale = FVector(1.f,1.f,1.f);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties")
-	float StaticMeshScaleMultiplier = 1.0f;
+	FVector CollitionBoxScale;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties")
+	float CollitionBoxScaleMultiplier = 1.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties")
 	int32 ElementIndex = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties | Material dynamic")
@@ -35,9 +34,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties | Material dynamic")
 	FName MaterialParameterName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties | Material dynamic")
-	float MaterialParameterValueMin = 0.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties | Material dynamic")
-	float MaterialParameterValueMax = 1.0f;
+	float MaterialParameterValue = 1.0f;
 
 	
 };

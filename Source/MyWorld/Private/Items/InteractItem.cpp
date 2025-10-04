@@ -54,9 +54,3 @@ void AInteractItem::Tick(float DeltaTime)
 	DeltaSeconds = DeltaTime;
 }
 
-void AInteractItem::OnConstruction(const FTransform& Transform)
-{
-	Super::OnConstruction(Transform);
-
-}
-

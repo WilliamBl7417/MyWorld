@@ -27,8 +27,6 @@ public:
 	/* Interface implementation*/
 	virtual void TouchingBP_Implementation() override;
 
-	virtual void OnConstruction(const FTransform& Transform) override;
-
 	/*Internal Functions*/
 
 	virtual void Tick(float DeltaTime) override;
@@ -37,25 +35,26 @@ public:
 
 	/*Variables*////
 	/* Components*/
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,BlueprintReadWrite, Category = "Components")
 	USceneComponent* SceneComponent;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	USkeletalMeshComponent* SkeletalMeshComp;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
+	USkeletalMesh* SkeletalMeshToShow;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMeshComponent* StaticMeshComp;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMeshComponent* ShadowMeshComp;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | Mesh")
 	UBoxComponent* BoxComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMesh* StaticMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
 	float DeltaSeconds;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	USkeletalMesh* SkeletalMesh;
+
 
 protected:
 
