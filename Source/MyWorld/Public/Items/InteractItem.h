@@ -45,8 +45,8 @@ public:
 	UStaticMeshComponent* StaticMeshComp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMeshComponent* ShadowMeshComp;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | Mesh")
-	UBoxComponent* BoxComp;
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | Mesh")
+	//UBoxComponent* BoxComp;/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMesh* StaticMesh;

@@ -14,8 +14,8 @@ AInteractItem::AInteractItem()
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
 	RootComponent = SceneComponent;
 
-	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
-	BoxComp->SetupAttachment(RootComponent);
+	//BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
+	//BoxComp->SetupAttachment(RootComponent);
 
 	SkeletalMeshComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 	SkeletalMeshComp->SetupAttachment(RootComponent);
