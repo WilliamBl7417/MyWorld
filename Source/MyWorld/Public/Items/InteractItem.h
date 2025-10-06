@@ -45,22 +45,20 @@ public:
 	UStaticMeshComponent* StaticMeshComp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMeshComponent* ShadowMeshComp;
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | Mesh")
-	//UBoxComponent* BoxComp;/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | Mesh")
+	UBoxComponent* BoxComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMesh* StaticMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
 	float DeltaSeconds;
-	
 
-
-protected:
 
 	/*Functions*/
 	/*Internal functions*/
 	virtual void BeginPlay() override;
+
 	void DebugMes(int32 Key, FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
 
 public:	

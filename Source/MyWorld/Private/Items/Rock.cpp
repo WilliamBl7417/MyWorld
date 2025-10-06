@@ -7,4 +7,7 @@ ARock::ARock()
 {
 
 }
-
+void ARock::BeginPlay()
+{
+	Super::BeginPlay();
+}

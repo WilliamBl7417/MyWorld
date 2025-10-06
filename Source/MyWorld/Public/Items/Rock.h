@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -19,6 +17,8 @@ public:
 	/*Functions*/
 	ARock();
 
+	virtual void BeginPlay() override;
+
 	/*Functions*/
 
 	/*Variables*/
@@ -33,8 +33,6 @@ public:
 	UMaterialInterface* RockMaterial;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties | Material dynamic")
 	FName MaterialParameterName;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties | Material dynamic")
-	float MaterialParameterValue = 1.0f;
 
 	
 };

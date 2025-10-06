@@ -10,6 +10,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Interfaces/TouchingInterface.h"
 
+#include "D:\UnrealEngine\MyWorld\Source\MyWorld\Public\Items\InteractItem.h"
+
 
 AWorldPlayer::AWorldPlayer()
 {
@@ -47,9 +49,6 @@ AWorldPlayer::AWorldPlayer()
 	bIsRunning = false;
 
 	OverlappingActor = nullptr;
-
-
-
 
 }
 
@@ -138,10 +137,8 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 {
 	CallTouchingBP(OverlappingActor);
 
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Touching"));
-	}
+	DebugMessage(-1, FString::Printf(TEXT("Interact Event Triggered with: %s"), OverlappingActor ? *OverlappingActor->GetName() : TEXT("null")), FColor::Cyan, 5.f);
+
 }
 
 void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
@@ -175,15 +172,36 @@ void AWorldPlayer::RunStopBP_Implementation()
 
 void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OverlappingActor == nullptr)
+	if (OtherActor == this){return;}	
+
+	if (OtherActor->IsA(AInteractItem::StaticClass()))
 	{
 		OverlappingActor = OtherActor;
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: es null")));
+
+		OverlappingActor = nullptr;
+
+		return;
 	}
 }
 
 void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	OverlappingActor = nullptr;
+	if (OverlappingActor != nullptr)
+	{
+		DebugMessage(-1, FString::Printf(TEXT("End Overlap con: %s"), *OtherActor->GetName()), FColor::Red, 5.f);
+		OverlappingActor = nullptr;
+
+	}
+	else
+	{
+		DebugMessage(-1, FString::Printf(TEXT("End Overlap con: es null")), FColor::Red, 5.f);
+	}
 
 }
 
@@ -193,7 +211,6 @@ void AWorldPlayer::CallTouchingBP(AActor* ActorOverlap)
 	{
 		ITouchingInterface::Execute_TouchingBP(ActorOverlap);
 	}
-
 }
 
 
