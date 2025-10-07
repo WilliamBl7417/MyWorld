@@ -111,15 +111,27 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Player Properties|Movement")
 	float CurrentSpeed;
 
-	// Control de aceleración
+	// Control de aceleración correr caminar
 	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
 	float SpeedInterpRate; 
 
 	bool bIsRunning = false;
 
 	virtual void BeginPlay() override;
-	UPROPERTY(VisibleAnywhere, Category = "Player Properties|References")
-	AInteractItem* InteractItem;
+
+
+
+
+
+
+
+
+	// Añadir nuevas variables para Interacción Dual
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
+	AInteractItem* OverlappingInteractItem = nullptr; // El objeto con el que hacemos overlap
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
+	AInteractItem* ItemInHand = nullptr; // El objeto que tenemos ATTACHED
 
 
 private:

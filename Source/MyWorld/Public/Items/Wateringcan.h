@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Wateringcan.h
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,13 +6,23 @@
 #include "Wateringcan.generated.h"
 
 /**
- * 
- */
+ * */
 UCLASS()
 class MYWORLD_API AWateringcan : public AInteractItem
 {
 	GENERATED_BODY()
 
+public:
 
-	
+	AWateringcan();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wateringcan Properties")
+	FName AttachSocketName;
+
+protected:
+
+	virtual void TouchingBP_Implementation() override;
+
+	UFUNCTION(BlueprintCallable, Category = "Wateringcan Logic")
+	void HandleAttachment();
 };
