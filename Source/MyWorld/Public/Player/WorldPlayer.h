@@ -13,6 +13,7 @@ class ACharacter;
 class UCapsuleComponent;
 class UStaticMeshComponent;
 class USkeletalMeshComponent;
+class AInteractItem;
 
 UCLASS()
 class MYWORLD_API AWorldPlayer : public ACharacter
@@ -55,6 +56,7 @@ public:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	void CallTouchingBP(AActor* ActorOverlap);
+	void CallWhateringBP(AActor* ActorOverlap);
 
 
 	/* Input */
@@ -72,10 +74,12 @@ public:
 	UInputAction* RunAction;
 
 	/* References */
-	ACharacter* PlayerCharacter;
+	
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
 	AActor* OverlappingActor;
+	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
+	ACharacter* PlayerCharacter;
 
 
 	/* Camera Components*/
@@ -113,10 +117,10 @@ public:
 
 	bool bIsRunning = false;
 
-
-protected:
-
 	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere, Category = "Player Properties|References")
+	AInteractItem* InteractItem;
+
 
 private:
 	void DebugMessage(int32 Key,FString Message, FColor Color = FColor::Green, float Duration = 2.0f);

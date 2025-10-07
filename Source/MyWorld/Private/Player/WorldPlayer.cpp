@@ -135,10 +135,16 @@ void AWorldPlayer::LookEvent(const FInputActionValue& Value)
 
 void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 {
-	CallTouchingBP(OverlappingActor);
-
-	DebugMessage(-1, FString::Printf(TEXT("Interact Event Triggered with: %s"), OverlappingActor ? *OverlappingActor->GetName() : TEXT("null")), FColor::Cyan, 5.f);
-
+	if (InteractItem != nullptr)
+	{
+		CallTouchingBP(InteractItem);
+		CallWhateringBP(InteractItem);
+	}
+	else
+	{
+		DebugMessage(-1, FString::Printf(TEXT("Interact Event Triggered with: %s"), InteractItem ? *InteractItem->GetName() : TEXT("null")), FColor::Cyan, 5.f);
+		return;
+	}
 }
 
 void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
@@ -172,44 +178,57 @@ void AWorldPlayer::RunStopBP_Implementation()
 
 void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor == this){return;}	
+	if (OtherActor == this){return;}
+
+	OverlappingActor = OtherActor;
 
 	if (OtherActor->IsA(AInteractItem::StaticClass()))
 	{
-		OverlappingActor = OtherActor;
-
+		if (InteractItem == nullptr)
+		{
+			InteractItem = Cast<AInteractItem>(OtherActor);
+			InteractItem->SavePlayerRef(this);
+		}
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: es null")));
-
-		OverlappingActor = nullptr;
-
-		return;
 	}
 }
 
 void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (OverlappingActor != nullptr)
-	{
-		DebugMessage(-1, FString::Printf(TEXT("End Overlap con: %s"), *OtherActor->GetName()), FColor::Red, 5.f);
-		OverlappingActor = nullptr;
+	DebugMessage(-1, FString::Printf(TEXT("End Overlap con: %s"), *OtherActor->GetName()), FColor::Red, 5.f);
 
-	}
-	else
+	if (InteractItem != nullptr)
 	{
-		DebugMessage(-1, FString::Printf(TEXT("End Overlap con: es null")), FColor::Red, 5.f);
+		if (InteractItem->bIsInHand == false)
+		{
+			//InteractItem->CleanPlayerRef();
+		}
 	}
+	OverlappingActor = nullptr;
+	InteractItem = nullptr;
 
 }
 
 void AWorldPlayer::CallTouchingBP(AActor* ActorOverlap)
-{
-	if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
+{ 
+	if (InteractItem->bImplementTouching == true)
 	{
-		ITouchingInterface::Execute_TouchingBP(ActorOverlap);
+		if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
+		{
+			ITouchingInterface::Execute_TouchingBP(ActorOverlap);
+		}
+	}
+}
+
+void AWorldPlayer::CallWhateringBP(AActor* ActorOverlap)
+{
+
+	if (InteractItem->bImplementWhatering == true)
+	{
+		if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
+		{
+			ITouchingInterface::Execute_WateringPlantBP(ActorOverlap);
+		}
 	}
 }
 

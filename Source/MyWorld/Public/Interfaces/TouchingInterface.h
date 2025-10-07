@@ -23,5 +23,8 @@ class MYWORLD_API ITouchingInterface
 public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) //Con Funcion en blueprints
-		void TouchingBP();  //Con Funcion en blueprints
+	void TouchingBP();  //Con Funcion en blueprints
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void WateringPlantBP();
 };

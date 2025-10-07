@@ -11,6 +11,8 @@ class UStaticMeshComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
 class UBoxComponent;
+class UTextRenderComponent;
+class AWorldPlayer;
 
 
 UCLASS()
@@ -26,6 +28,13 @@ public:
 
 	/* Interface implementation*/
 	virtual void TouchingBP_Implementation() override;
+	virtual void WateringPlantBP_Implementation() override;
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction |")
+	void SavePlayerRef(AWorldPlayer* PlayerRef);
+	UFUNCTION(BlueprintCallable, Category = "Interaction |")
+	void CleanPlayerRef();
+
 
 	/*Internal Functions*/
 
@@ -35,17 +44,20 @@ public:
 
 	/*Variables*////
 	/* Components*/
-	UPROPERTY(VisibleDefaultsOnly,BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,BlueprintReadWrite, Category = "Components |")
 	USceneComponent* SceneComponent;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components |")
+	UTextRenderComponent* TextRender;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | TextRender")
 	USkeletalMeshComponent* SkeletalMeshComp;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | SKMesh")
 	USkeletalMesh* SkeletalMeshToShow;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | StaticMesh")
 	UStaticMeshComponent* StaticMeshComp;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | StaticMesh")
 	UStaticMeshComponent* ShadowMeshComp;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | Mesh")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | BoxCollition")
 	UBoxComponent* BoxComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
@@ -54,12 +66,44 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
 	float DeltaSeconds;
 
+	/*Variables*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | BoxCollitions")
+	FVector CollitionBoxScale = FVector(1.f, 1.f, .2f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | BoxCollition")
+	float CollitionBoxScaleMultiplier = 20.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties |")
+	int32 ElementIndex = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Material dynamic")
+	UMaterialInterface* RockMaterial;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Material dynamic")
+	FName MaterialParameterName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Material dynamic")
+	bool AlreadyChangeMat = false; 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
+	bool bImplementTouching = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
+	bool bImplementWhatering = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
+	bool bIsInHand = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties | References")
+	AWorldPlayer* WorldPlayerRef;
+	/*Variables*/
+
 
 	/*Functions*/
 	/*Internal functions*/
 	virtual void BeginPlay() override;
 
 	void DebugMes(int32 Key, FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
+
+
+
+
+
+
 
 public:	
 

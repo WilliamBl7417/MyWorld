@@ -23,16 +23,7 @@ public:
 
 	/*Variables*/
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties")
-	FVector CollitionBoxScale = FVector(1.f,1.f,.2f);
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties")
-	float CollitionBoxScaleMultiplier = 20.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties")
-	int32 ElementIndex = 0;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties | Material dynamic")
-	UMaterialInterface* RockMaterial;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Properties | Material dynamic")
-	FName MaterialParameterName;
+
 
 	
 };
