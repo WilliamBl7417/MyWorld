@@ -13,6 +13,8 @@ class USceneComponent;
 class UBoxComponent;
 class UTextRenderComponent;
 class AWorldPlayer;
+class UParticleSystem;
+class USoundBase;
 
 
 UCLASS()
@@ -35,7 +37,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Interaction |")
 	void CleanPlayerRef();
 
-
 	/*Internal Functions*/
 
 	virtual void Tick(float DeltaTime) override;
@@ -54,17 +55,13 @@ public:
 	USkeletalMesh* SkeletalMeshToShow;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | StaticMesh")
 	UStaticMeshComponent* StaticMeshComp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
+	UStaticMesh* StaticMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | StaticMesh")
 	UStaticMeshComponent* ShadowMeshComp;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | BoxCollition")
 	UBoxComponent* BoxComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
-	UStaticMesh* StaticMesh;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
-	float DeltaSeconds;
 
 	/*Variables*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | BoxCollitions")
@@ -81,6 +78,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Material dynamic")
 	bool AlreadyChangeMat = false; 
 
+	/*Sonidos y particulas*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Sound and Particles")
+	USoundBase* TouchingSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Sound and Particles")
+	UParticleSystem* TouchingParticles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Sound and Particles")
+	USoundBase* WateringSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Sound and Particles")
+	UParticleSystem* WateringParticles;
+	/*Sonidos y particulas*/
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
 	bool bImplementTouching = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
@@ -92,20 +101,17 @@ public:
 	AWorldPlayer* WorldPlayerRef;
 	/*Variables*/
 
-
 	/*Functions*/
 	/*Internal functions*/
 	virtual void BeginPlay() override;
 
+
+protected:
+
 	void DebugMes(int32 Key, FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
 
-
-
-
-
-
-
-public:	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
+	float DeltaSeconds;
 
 
 };

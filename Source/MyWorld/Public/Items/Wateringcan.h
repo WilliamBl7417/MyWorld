@@ -19,10 +19,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wateringcan Properties")
 	FName AttachSocketName;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wateringcan Properties")
+	bool bWasWateredRef = false;
+
 protected:
 
 	virtual void TouchingBP_Implementation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Wateringcan Logic")
 	void HandleAttachment();
+
+	
 };

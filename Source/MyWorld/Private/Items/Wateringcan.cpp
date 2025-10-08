@@ -26,28 +26,27 @@ void AWateringcan::HandleAttachment()
 		DebugMes(-1, TEXT("Attachment failed: Missing Player Mesh or Socket Name."), FColor::Red, 2.0f);
 		return;
 	}
+
 	// adjunto/desadjuntado
 	if (!bIsInHand)
 	{
 		FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true);
-		StaticMeshComp->AttachToComponent(WorldPlayerRef->GetMesh(), AttachRules, AttachSocketName);
 
-		StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		ShadowMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		BoxComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		RootComponent->AttachToComponent(WorldPlayerRef->GetMesh(), AttachRules, AttachSocketName);
 
+		if (StaticMeshComp) StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		if (ShadowMeshComp) ShadowMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		if (BoxComp) BoxComp->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
 		bIsInHand = true;
 		DebugMes(-1, TEXT("Wateringcan ATTACHED!"), FColor::Blue, 2.0f);
 	}
-	else // Si SÍ está en la mano, lo desadjuntamos
+	else 
 	{
 		FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false);
-		StaticMeshComp->DetachFromComponent(DetachRules);
 
-		StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
-		BoxComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-
+		RootComponent->DetachFromComponent(DetachRules);
+		if (StaticMeshComp) StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		if (BoxComp) BoxComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly); 
 		CleanPlayerRef();
 
 		bIsInHand = false;

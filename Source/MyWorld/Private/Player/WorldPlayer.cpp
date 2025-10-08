@@ -11,6 +11,8 @@
 #include "Interfaces/TouchingInterface.h"
 #include "Items/Wateringcan.h"
 #include "Items/InteractItem.h"
+#include "Items/Flower.h"
+
 
 AWorldPlayer::AWorldPlayer()
 {
@@ -137,60 +139,95 @@ void AWorldPlayer::LookEvent(const FInputActionValue& Value)
 
 void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 {
-	if (ItemInHand != nullptr)
+	// ----------------------------------------------------------------------
+	// 1. Lógica de la Regadera (EquipableWateringcan)
+	// ----------------------------------------------------------------------
+	if
+
+	(IsValid(EquipableWateringcan))
 	{
-		if (ItemInHand->IsA(AWateringcan::StaticClass()))
+		if (EquipableWateringcan->bIsInHand)
 		{
 			if (OverlappingInteractItem != nullptr && OverlappingInteractItem->bImplementWhatering)
 			{
-				CallWhateringBP(OverlappingInteractItem);
+				if (OverlappingInteractItem->IsA(AFlower::StaticClass()))
+				{
+					AFlower* Flower = Cast<AFlower>(OverlappingInteractItem);
+					if (Flower->bWasWatered == false)
+					{
+						EquipableWateringcan->bWasWateredRef = Flower->bWasWatered;
+						CallWateringBP(OverlappingInteractItem);
+						CallWateringBP(EquipableWateringcan);
+						EquipableWateringcan->bWasWateredRef = Flower->bWasWatered;
+					}
+					else
+					{
+						CallTouchingBP(OverlappingInteractItem);
+					}
+				}
 				return;
 			}
-		}
 
-		if (ItemInHand->bImplementTouching)
-		{
-			CallTouchingBP(ItemInHand);
+			CallTouchingBP(EquipableWateringcan);
 
-			if (!ItemInHand->bIsInHand)
+			if (!EquipableWateringcan->bIsInHand)
 			{
-				ItemInHand = nullptr;
+				EquipableWateringcan = nullptr;
 			}
 			return;
 		}
-		if (ItemInHand->bImplementTouching)
+
+		else if (OverlappingInteractItem == EquipableWateringcan)
 		{
-			CallTouchingBP(ItemInHand);
+			CallTouchingBP(EquipableWateringcan);
 
-			if (!ItemInHand->bIsInHand)
+			// Si se adjunta correctamente, limpiamos el overlap genérico.
+			if (EquipableWateringcan->bIsInHand)
 			{
-				ItemInHand = nullptr;
-			}
-			return;
-		}
-	}
-
-	if (IsValid(OverlappingInteractItem))
-	{
-		if (OverlappingInteractItem->bImplementTouching)
-		{
-			CallTouchingBP(OverlappingInteractItem);
-
-			/*si el objeto ahora está en mano, actualizar la referencia */
-			if (OverlappingInteractItem->bIsInHand)
-			{
-				ItemInHand = OverlappingInteractItem;
-
-				// limpiar la referencia de overlap para evitar interacciones 
 				OverlappingInteractItem = nullptr;
 			}
 			return;
 		}
 	}
-	// Debug final
-	DebugMessage(-1, FString::Printf(TEXT("Interact Event Triggered: Overlap(%s), Hand(%s)"),
-		OverlappingInteractItem ? *OverlappingInteractItem->GetName() : TEXT("null"),
-		ItemInHand ? *ItemInHand->GetName() : TEXT("null")), FColor::Cyan, 5.f);
+
+	// ----------------------------------------------------------------------
+	// 2. Lógica de ItemInHand (Objetos genéricos)
+	// ----------------------------------------------------------------------
+	if (ItemInHand != nullptr)
+	{
+		if (ItemInHand->bImplementTouching)
+		{
+			CallTouchingBP(ItemInHand);
+
+			if (!ItemInHand->bIsInHand)
+			{
+				ItemInHand = nullptr;
+			}
+			return;
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	// 3. Lógica de OverlappingInteractItem (Recoger objetos genéricos)
+	// ----------------------------------------------------------------------
+	if (IsValid(OverlappingInteractItem))
+	{
+		if (OverlappingInteractItem->bImplementTouching)
+		{
+			CallTouchingBP(OverlappingInteractItem);
+			if (OverlappingInteractItem->bIsInHand)
+			{
+				ItemInHand = OverlappingInteractItem;
+				OverlappingInteractItem = nullptr;
+			}
+			return;
+		}
+	}
+
+	//DebugMessage(-1, FString::Printf(TEXT("Interact Event Triggered: Overlap(%s), Hand(%s), Can(%s)"),
+	//	OverlappingInteractItem ? *OverlappingInteractItem->GetName() : TEXT("null"),
+	//	ItemInHand ? *ItemInHand->GetName() : TEXT("null"),
+	//	EquipableWateringcan ? *EquipableWateringcan->GetName() : TEXT("null")), FColor::Cyan, 5.f);
 }
 
 void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
@@ -231,8 +268,23 @@ void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* O
 	{
 		AInteractItem* NewInteractItem = Cast<AInteractItem>(OtherActor);
 
-		//guardar referencia solo si no tengo nada en mano y no es el mismo objeto
-		if (NewInteractItem != ItemInHand)
+		if (NewInteractItem->IsA(AWateringcan::StaticClass()))
+		{
+			// *** NUEVA LÓGICA: Guardar la regadera en su variable específica. ***
+			// No debe ser limpiada en OnEndOverlap.
+			EquipableWateringcan = Cast<AWateringcan>(NewInteractItem);
+			EquipableWateringcan->SavePlayerRef(this);
+
+			// Si la regadera no está en mano, la mostramos como el objeto de overlap para Interacción (E)
+			// Si ya la tiene en mano, no hace falta.
+			if (!EquipableWateringcan->bIsInHand)
+			{
+				OverlappingInteractItem = EquipableWateringcan;
+			}
+
+		}
+		// Guardar objetos interactivos genéricos
+		else if (NewInteractItem != ItemInHand)
 		{
 			if (OverlappingInteractItem == nullptr)
 			{
@@ -240,6 +292,7 @@ void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* O
 				OverlappingInteractItem->SavePlayerRef(this);
 			}
 		}
+
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
 	}
 }
@@ -247,8 +300,43 @@ void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* O
 void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	AInteractItem* EndedOverlapItem = Cast<AInteractItem>(OtherActor);
-	OverlappingActor = nullptr;
+
+	if (IsValid(EndedOverlapItem))
+	{
+		// Si es la regadera, no hacemos nada con la limpieza aquí, ya que la manejaremos
+		// a través de la interacción (InteractEvent) cuando se suelte.
+		if (EndedOverlapItem->IsA(AWateringcan::StaticClass()))
+		{
+			// Si la regadera sale del overlap, solo quitamos su referencia del OverlappingInteractItem genérico,
+			// pero NO la limpiamos del EquipableWateringcan
+			if (EndedOverlapItem == OverlappingInteractItem)
+			{
+				OverlappingInteractItem = nullptr;
+			}
+			return;
+		}
+
+		// Lógica para objetos interactivos genéricos (no regadera)
+		if (EndedOverlapItem == OverlappingInteractItem)
+		{
+			if (!EndedOverlapItem->bIsInHand)
+			{
+				EndedOverlapItem->CleanPlayerRef();
+				OverlappingInteractItem = nullptr;
+				DebugMessage(-1, FString::Printf(TEXT("End Overlap y limpieza de: %s"), *OtherActor->GetName()), FColor::Yellow, 2.f);
+			}
+		}
+	}
 }
+//{
+//
+//	AInteractItem* EndedOverlapItem = Cast<AInteractItem>(OtherActor);
+//
+//	if (!EndedOverlapItem->IsA(AWateringcan::StaticClass()))
+//	{
+//		OverlappingInteractItem = nullptr;
+//	}
+//}
 void AWorldPlayer::CallTouchingBP(AActor* ActorOverlap)
 {
 	if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
@@ -257,7 +345,7 @@ void AWorldPlayer::CallTouchingBP(AActor* ActorOverlap)
 	}
 }
 
-void AWorldPlayer::CallWhateringBP(AActor* ActorOverlap)
+void AWorldPlayer::CallWateringBP(AActor* ActorOverlap)
 {
 	if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
 	{

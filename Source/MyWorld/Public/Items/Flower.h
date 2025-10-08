@@ -17,5 +17,9 @@ class MYWORLD_API AFlower : public AInteractItem
 public:
 	AFlower();
 
-	
+	virtual void WateringPlantBP_Implementation() override;
+
+	/*Variables*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Flower Properties")
+	bool bWasWatered = false;
 };

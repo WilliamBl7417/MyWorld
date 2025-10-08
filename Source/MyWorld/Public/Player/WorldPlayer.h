@@ -14,6 +14,7 @@ class UCapsuleComponent;
 class UStaticMeshComponent;
 class USkeletalMeshComponent;
 class AInteractItem;
+class AWateringcan;
 
 UCLASS()
 class MYWORLD_API AWorldPlayer : public ACharacter
@@ -56,7 +57,7 @@ public:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	void CallTouchingBP(AActor* ActorOverlap);
-	void CallWhateringBP(AActor* ActorOverlap);
+	void CallWateringBP(AActor* ActorOverlap);
 
 
 	/* Input */
@@ -74,13 +75,10 @@ public:
 	UInputAction* RunAction;
 
 	/* References */
-	
-
 	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
 	AActor* OverlappingActor;
 	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
 	ACharacter* PlayerCharacter;
-
 
 	/* Camera Components*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -91,13 +89,12 @@ public:
 	UCapsuleComponent* CapsuleOverlap;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	USkeletalMeshComponent* ClothesMesh;
-
 	/* Variables */
+
 
 	/* Camera Variables */
 	UPROPERTY(EditAnywhere, Category = "Player Properties|Camera")
 	float LookSensitivity = 1.0f;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Camera")
 	float MinCameraPitch = -60.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Camera")
@@ -119,20 +116,14 @@ public:
 
 	virtual void BeginPlay() override;
 
-
-
-
-
-
-
-
-	// Añadir nuevas variables para Interacción Dual
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
-	AInteractItem* OverlappingInteractItem = nullptr; // El objeto con el que hacemos overlap
+	AInteractItem* OverlappingInteractItem = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
-	AInteractItem* ItemInHand = nullptr; // El objeto que tenemos ATTACHED
+	AInteractItem* ItemInHand = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
+	AWateringcan* EquipableWateringcan = nullptr;
 
 private:
 	void DebugMessage(int32 Key,FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
