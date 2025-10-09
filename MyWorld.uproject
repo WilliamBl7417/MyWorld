@@ -29,5 +29,9 @@
 			"Name": "GizmoEdMode",
 			"Enabled": true
 		}
+	],
+	"TargetPlatforms": [
+		"Windows",
+		"Android"
 	]
 }
