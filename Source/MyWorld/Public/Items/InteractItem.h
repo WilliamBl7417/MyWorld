@@ -17,12 +17,14 @@ class UParticleSystem;
 class USoundBase;
 
 
+
 UCLASS()
 class MYWORLD_API AInteractItem : public AActor, public ITouchingInterface
 {
 	GENERATED_BODY()
 
 public:
+
 
 	/*Functions*///
 
@@ -32,14 +34,17 @@ public:
 	virtual void TouchingBP_Implementation() override;
 	virtual void WateringPlantBP_Implementation() override;
 
+	UFUNCTION(BlueprintCallable, Category = "Animation | Rates")
+	void SetAnimRatePlay(FVector WorldScale, float RPM_Min, float RPM_Max, float RPS_Min, float RPS_Max, float RPB_Min, float RPB_Max);
+
 	UFUNCTION(BlueprintCallable, Category = "Interaction |")
 	void SavePlayerRef(AWorldPlayer* PlayerRef);
 	UFUNCTION(BlueprintCallable, Category = "Interaction |")
 	void CleanPlayerRef();
 
 	/*Internal Functions*/
-
 	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
 
 	/*Functions*///
 
@@ -97,14 +102,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
 	bool bIsInHand = false;
 
+
+	/*Variables Animacion Playrate*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation | MeshSizes")
+	float MeshSizeM;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation | MeshSizes")
+	float MeshSizeS;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation | MeshSizes")
+	float MeshSizeB;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties | References")
 	AWorldPlayer* WorldPlayerRef;
 	/*Variables*/
 
 	/*Functions*/
-	/*Internal functions*/
-	virtual void BeginPlay() override;
-
 
 protected:
 

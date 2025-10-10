@@ -8,8 +8,6 @@
 #include "Components/TextRenderComponent.h"
 #include "Player/WorldPlayer.h"
 
-
-
 AInteractItem::AInteractItem()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -33,6 +31,7 @@ AInteractItem::AInteractItem()
 	ShadowMeshComp->SetupAttachment(StaticMeshComp);
 	WorldPlayerRef = nullptr;
 
+
 }
 
 
@@ -49,6 +48,41 @@ void AInteractItem::WateringPlantBP_Implementation()
 	//also i can leave it empty and just implement the logic in blueprint
 	//DebugMes(-1, FString::Printf(TEXT("WateringPlantBP_Implementation called")), FColor::Green, 2.f);
 }
+
+void AInteractItem::SetAnimRatePlay(FVector WorldScale, 
+	float RPM_Min, 
+	float RPM_Max, 
+	float RPS_Min, 
+	float RPS_Max, 
+	float RPB_Min, 
+	float RPB_Max)
+{
+
+	if (WorldScale.X == MeshSizeM &&
+		WorldScale.Y == MeshSizeM &&
+		WorldScale.Z == MeshSizeM)
+	{
+		SkeletalMeshComp->GlobalAnimRateScale = (FMath::FRandRange(RPM_Min,RPM_Max));
+	}
+	else if (WorldScale.X == MeshSizeS &&
+		WorldScale.Y == MeshSizeS &&
+		WorldScale.Z == MeshSizeS)
+	{
+		SkeletalMeshComp->GlobalAnimRateScale =(FMath::FRandRange(RPS_Min, RPS_Max));
+
+	}
+	else if (WorldScale.X == MeshSizeB &&
+		WorldScale.Y == MeshSizeB &&
+		WorldScale.Z == MeshSizeB)
+	{
+		SkeletalMeshComp->GlobalAnimRateScale = (FMath::FRandRange(RPB_Min, RPB_Max));
+
+	}
+
+
+
+}
+
 
 void AInteractItem::SavePlayerRef(AWorldPlayer* PlayerRef)
 {
