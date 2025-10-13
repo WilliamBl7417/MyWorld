@@ -94,6 +94,7 @@ void AWorldPlayer::Tick(float DeltaTime)
 	CurrentSpeed = FMath::FInterpTo(CurrentSpeed, TargetSpeed, DeltaTime, SpeedInterpRate);
 
 	PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed = CurrentSpeed;
+	DeltaSeconds = DeltaTime;
 
 }
 
@@ -350,6 +351,18 @@ void AWorldPlayer::CallWateringBP(AActor* ActorOverlap)
 	if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
 	{
 		ITouchingInterface::Execute_WateringPlantBP(ActorOverlap);
+	}
+}
+
+void AWorldPlayer::playMontageAnim_Implementation(UAnimMontage* MontageToPlay)
+{
+	if (MontageToPlay == nullptr)
+	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MontageToPlay is nullptr"));
+		}
+		return;
 	}
 }
 

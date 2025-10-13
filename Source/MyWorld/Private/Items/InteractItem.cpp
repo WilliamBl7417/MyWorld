@@ -9,7 +9,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
-
 #include "Player/WorldPlayer.h"
 
 AInteractItem::AInteractItem()
@@ -33,6 +32,10 @@ AInteractItem::AInteractItem()
 
 	ShadowMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShadowMeshComp"));
 	ShadowMeshComp->SetupAttachment(StaticMeshComp);
+
+	StaticMeshAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("StaticMeshAttachPoint")); // <-- ADD THIS
+	StaticMeshAttachPoint->SetupAttachment(RootComponent);
+
 	WorldPlayerRef = nullptr;
 
 }
@@ -111,7 +114,15 @@ void AInteractItem::SetAnimRatePlay(FVector WorldScale,
 
 void AInteractItem::SavePlayerRef(AWorldPlayer* PlayerRef)
 {
-	WorldPlayerRef = PlayerRef;
+	//WorldPlayerRef = PlayerRef;
+	if (PlayerRef == nullptr)
+	{
+		WorldPlayerRef = Cast<AWorldPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
+	}
+	else
+	{
+		WorldPlayerRef = PlayerRef;
+	}
 }
 
 void AInteractItem::CleanPlayerRef()
@@ -119,29 +130,119 @@ void AInteractItem::CleanPlayerRef()
 	WorldPlayerRef = nullptr;
 }
 
-void AInteractItem::PlaySoundAndParticlesAtLocation(USoundBase* SoundToPlay, UNiagaraSystem* ParticlesToPlay, FTransform ParticleTransform)
+// InteractItem.cpp
+
+void AInteractItem::PlaySoundAndParticles(
+	USoundBase* SoundToPlay,
+	UNiagaraSystem* ParticlesToPlay,
+	AActor* TargetActor,
+	FName SocketName,
+	bool bAttachToSkeletalMesh,
+	bool bAttachToStaticMesh,
+	FVector LocationOverride,
+	FRotator RotationOverride,
+	FVector ScaleOverride
+)
 {
-	if (SoundToPlay != nullptr && ParticlesToPlay != nullptr)
+	// Play sound (sound logic is fine)
+	if (SoundToPlay)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, SoundToPlay, GetActorLocation());
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Cast<UNiagaraSystem>(ParticlesToPlay), ParticleTransform.GetLocation(), ParticleTransform.GetRotation().Rotator(), ParticleTransform.GetScale3D(), true, true, ENCPoolMethod::AutoRelease, true);
+		FVector SoundLocation = TargetActor ? TargetActor->GetActorLocation() : GetActorLocation();
+		UGameplayStatics::PlaySoundAtLocation(this, SoundToPlay, SoundLocation);
 	}
-	else if (SoundToPlay != nullptr && ParticlesToPlay == nullptr)
+
+	// Handle particles
+	if (ParticlesToPlay && TargetActor)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, SoundToPlay, GetActorLocation());
+		bool bAttached = false;
+
+	
+		USkeletalMeshComponent* TargetSkeletalMesh = nullptr;
+		USceneComponent* TargetStaticAttachComp = nullptr; 
+
+		// --- 1. Get the target components ---
+		if (TargetActor == this)
+		{
+			TargetSkeletalMesh = SkeletalMeshComp;
+
+			if (StaticMeshAttachPoint)
+			{
+				TargetStaticAttachComp = StaticMeshAttachPoint;
+			}
+	
+			else
+			{
+				TargetStaticAttachComp = StaticMeshComp;
+			}
+		}
+		else
+		{
+		
+			TargetSkeletalMesh = TargetActor->FindComponentByClass<USkeletalMeshComponent>();
+			TargetStaticAttachComp = TargetActor->FindComponentByClass<UStaticMeshComponent>();
+		}
+
+
+		// --- 2. Try attaching to Skeletal Mesh ---
+		if (bAttachToSkeletalMesh && TargetSkeletalMesh)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAttached(
+				ParticlesToPlay,
+				TargetSkeletalMesh,
+				SocketName,
+				FVector::ZeroVector,
+				FRotator::ZeroRotator,
+				EAttachLocation::SnapToTarget,
+				true, true, ENCPoolMethod::AutoRelease, true
+			);
+			bAttached = true;
+			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Niagara attached to SkeletalMesh."));
+		}
+
+		// --- 3. Try attaching to Static Mesh (or custom component) ---
+		if (!bAttached && bAttachToStaticMesh && TargetStaticAttachComp)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAttached(
+				ParticlesToPlay,
+				TargetStaticAttachComp,
+				SocketName,
+				FVector::ZeroVector,
+				FRotator::ZeroRotator,
+				EAttachLocation::SnapToTarget,
+				true, true, ENCPoolMethod::AutoRelease, true
+			);
+			bAttached = true;
+			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT("Niagara attached to Static/Custom Component."));
+		}
+
+		// --- 4. Fallback: spawn at location ---
+		if (!bAttached)
+		{
+			FVector SpawnLocation = LocationOverride.IsNearlyZero() ? GetActorLocation() : LocationOverride;
+			FRotator SpawnRotation = RotationOverride.IsZero() ? FRotator::ZeroRotator : RotationOverride;
+			FVector SpawnScale = ScaleOverride.IsNearlyZero() ? FVector(1.f) : ScaleOverride;
+
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+				GetWorld(),
+				ParticlesToPlay,
+				SpawnLocation,
+				SpawnRotation,
+				SpawnScale,
+				true, true, ENCPoolMethod::AutoRelease, true
+			);
+
+			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Niagara spawned at location (not attached)"));
+		}
 	}
-	else if (SoundToPlay == nullptr && ParticlesToPlay != nullptr)
+	else if (GEngine && ParticlesToPlay && !TargetActor)
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Cast<UNiagaraSystem>(ParticlesToPlay), ParticleTransform.GetLocation(), ParticleTransform.GetRotation().Rotator(), ParticleTransform.GetScale3D(), true, true, ENCPoolMethod::AutoRelease, true);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("TargetActor was null, cannot attach."));
 	}
 }
-
 
 void AInteractItem::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 void AInteractItem::DebugMes(int32 Key, FString Message, FColor Color, float Duration)

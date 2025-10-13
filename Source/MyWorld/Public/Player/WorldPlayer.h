@@ -59,6 +59,13 @@ public:
 	void CallTouchingBP(AActor* ActorOverlap);
 	void CallWateringBP(AActor* ActorOverlap);
 
+	/*Functions to play montages or others stuffs*/
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Player Actions")
+	void playMontageAnim(UAnimMontage* MontageToPlay);
+
+	void playMontageAnim_Implementation(UAnimMontage* MontageToPlay);
+
+
 
 	/* Input */
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -124,6 +131,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
 	AWateringcan* EquipableWateringcan = nullptr;
+
+	protected:
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|Tick")
+		float DeltaSeconds;
 
 private:
 	void DebugMessage(int32 Key,FString Message, FColor Color = FColor::Green, float Duration = 2.0f);

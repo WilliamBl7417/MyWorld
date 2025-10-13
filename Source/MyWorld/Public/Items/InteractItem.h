@@ -24,8 +24,9 @@ class MYWORLD_API AInteractItem : public AActor, public ITouchingInterface
 	GENERATED_BODY()
 
 public:
-	/*Functions*///
 
+
+	/*Functions*///
 	AInteractItem();
 
 	/* Interface implementation*/
@@ -50,15 +51,26 @@ public:
 	void CleanPlayerRef();
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction |")
-	void PlaySoundAndParticlesAtLocation(USoundBase* SoundToPlay, UNiagaraSystem* ParticlesToPlay, FTransform ParticleTransform);
+	void PlaySoundAndParticles(
+		USoundBase* SoundToPlay,
+		UNiagaraSystem* ParticlesToPlay,
+		AActor* TargetActor,
+		FName SocketName,
+		bool bAttachToSkeletalMesh,
+		bool bAttachToStaticMesh,
+		FVector LocationOverride,
+		FRotator RotationOverride,
+		FVector ScaleOverridee
+	);
 	
 	/*Internal Functions*/
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
-	/*Functions*///
+	/*Functions*/
 
-	/*Variables*////
+	/*Variables*/
+
 	/* Components*/
 	UPROPERTY(VisibleDefaultsOnly,BlueprintReadWrite, Category = "Components |")
 	USceneComponent* SceneComponent;
@@ -72,6 +84,9 @@ public:
 	UStaticMeshComponent* StaticMeshComp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMesh* StaticMesh;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components |")
+	USceneComponent* StaticMeshAttachPoint;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components | StaticMesh")
 	UStaticMeshComponent* ShadowMeshComp;
@@ -112,8 +127,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
 	bool bIsInHand = false;
 
+	/*References*/
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties | References")
 	AWorldPlayer* WorldPlayerRef;
+
+
 	/*Variables*/
 
 	/*Functions*/
