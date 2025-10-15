@@ -30,6 +30,7 @@ void AWateringcan::HandleAttachment()
 	// adjunto/desadjuntado
 	if (!bIsInHand)
 	{
+		WorldPlayerRef->IsInHand = 0;
 		FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true);
 
 		RootComponent->AttachToComponent(WorldPlayerRef->GetMesh(), AttachRules, AttachSocketName);
@@ -39,9 +40,13 @@ void AWateringcan::HandleAttachment()
 		if (BoxComp) BoxComp->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
 		bIsInHand = true;
 		DebugMes(-1, TEXT("Wateringcan ATTACHED!"), FColor::Blue, 2.0f);
+
+		
 	}
 	else 
 	{
+		WorldPlayerRef->IsInHand = 50;
+
 		FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false);
 
 		RootComponent->DetachFromComponent(DetachRules);
@@ -51,5 +56,6 @@ void AWateringcan::HandleAttachment()
 
 		bIsInHand = false;
 		DebugMes(-1, TEXT("Wateringcan DETACHED!"), FColor::Blue, 2.0f);
+		
 	}
 };

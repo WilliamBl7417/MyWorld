@@ -132,6 +132,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
 	AWateringcan* EquipableWateringcan = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
+	float IsInHand = 50;//usamos esto para el blendspace, para saber si tengo algo en la mano o no 50 si, y 0 no se settea en la clase Wateringcan
+
 	protected:
 		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|Tick")
 		float DeltaSeconds;
