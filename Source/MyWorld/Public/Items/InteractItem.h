@@ -45,12 +45,12 @@ public:
 		float MeshSizeM,
 		float MeshSizeS);
 
-	UFUNCTION(BlueprintCallable, Category = "Interaction |")
+	UFUNCTION(BlueprintCallable, Category = "Interaction | PlayerRef")
 	void SavePlayerRef(AWorldPlayer* PlayerRef);
-	UFUNCTION(BlueprintCallable, Category = "Interaction |")
+	UFUNCTION(BlueprintCallable, Category = "Interaction | PlayerRef")
 	void CleanPlayerRef();
 
-	UFUNCTION(BlueprintCallable, Category = "Interaction |")
+	UFUNCTION(BlueprintCallable, Category = "Interaction | Sounds N Particles")
 	void PlaySoundAndParticles(
 		USoundBase* SoundToPlay,
 		UNiagaraSystem* ParticlesToPlay,
@@ -62,6 +62,11 @@ public:
 		FRotator RotationOverride,
 		FVector ScaleOverridee
 	);
+
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interaction | Material")
+	void ChangeMaterialInteraction();
+
+	virtual void ChangeMaterialInteraction_Implementation();
 	
 	/*Internal Functions*/
 	virtual void Tick(float DeltaTime) override;

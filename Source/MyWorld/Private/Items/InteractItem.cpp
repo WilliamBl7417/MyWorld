@@ -252,6 +252,9 @@ void AInteractItem::DebugMes(int32 Key, FString Message, FColor Color, float Dur
 		GEngine->AddOnScreenDebugMessage(Key, Duration, Color, Message);
 	}
 }
+void AInteractItem::ChangeMaterialInteraction_Implementation()
+{
+}
 void AInteractItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

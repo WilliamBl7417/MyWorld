@@ -14,16 +14,9 @@ class MYWORLD_API ARock : public AInteractItem
 
 public:
 
-	/*Functions*/
 	ARock();
 
 	virtual void BeginPlay() override;
-
-	/*Functions*/
-
-	/*Variables*/
-
-
 
 	
 };
