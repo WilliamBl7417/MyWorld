@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Items/InteractItem.h"
 #include "Wateringcan.generated.h"
+class UMovementPlayerAtencionComponent;
 
 /**
  * */
@@ -22,6 +23,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wateringcan Properties")
 	bool bWasWateredRef = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement Properties")
+	UMovementPlayerAtencionComponent* MovementPlayerAtencionComponent;
+
 protected:
 
 	virtual void TouchingBP_Implementation() override;
@@ -29,5 +33,5 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Wateringcan Logic")
 	void HandleAttachment();
 
-	
+
 };

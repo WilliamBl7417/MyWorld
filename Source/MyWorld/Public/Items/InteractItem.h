@@ -13,8 +13,7 @@ class USceneComponent;
 class UBoxComponent;
 class UTextRenderComponent;
 class AWorldPlayer;
-class USoundBase;
-class UNiagaraSystem;
+class UPlaySoundAndParticles;
 
 
 
@@ -33,35 +32,11 @@ public:
 	virtual void TouchingBP_Implementation() override;
 	virtual void WateringPlantBP_Implementation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Animation | Rates")
-	void SetAnimRatePlay(FVector WorldScale, 
-		float RPB_Min,
-		float RPB_Max,
-		float RPM_Min,
-		float RPM_Max,
-		float RPS_Min,
-		float RPS_Max,
-		float MeshSizeB,
-		float MeshSizeM,
-		float MeshSizeS);
-
 	UFUNCTION(BlueprintCallable, Category = "Interaction | PlayerRef")
 	void SavePlayerRef(AWorldPlayer* PlayerRef);
+
 	UFUNCTION(BlueprintCallable, Category = "Interaction | PlayerRef")
 	void CleanPlayerRef();
-
-	UFUNCTION(BlueprintCallable, Category = "Interaction | Sounds N Particles")
-	void PlaySoundAndParticles(
-		USoundBase* SoundToPlay,
-		UNiagaraSystem* ParticlesToPlay,
-		AActor* TargetActor,
-		FName SocketName,
-		bool bAttachToSkeletalMesh,
-		bool bAttachToStaticMesh,
-		FVector LocationOverride,
-		FRotator RotationOverride,
-		FVector ScaleOverridee
-	);
 
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interaction | Material")
 	void ChangeMaterialInteraction();
@@ -71,8 +46,8 @@ public:
 	/*Internal Functions*/
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
-
 	/*Functions*/
+
 
 	/*Variables*/
 
@@ -89,6 +64,8 @@ public:
 	UStaticMeshComponent* StaticMeshComp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
 	UStaticMesh* StaticMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | Mesh")
+	UPlaySoundAndParticles* ObjectEfects;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components |")
 	USceneComponent* StaticMeshAttachPoint;
@@ -98,7 +75,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components | BoxCollition")
 	UBoxComponent* BoxComp;
 
-	/*Variables*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | BoxCollitions")
 	FVector CollitionBoxScale = FVector(1.f, 1.f, .2f);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components | BoxCollition")
@@ -114,15 +90,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties | Const")
 	FVector InitialScale;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties | Const")
-	FVector SocketLocation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Const")
-	FName SocktetNameForParticles;
-
-
-	/*Sonidos y particulas*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Sound and Particles")
-	USoundBase* SoundToUse;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
@@ -142,7 +109,19 @@ public:
 
 	/*Functions*/
 
-protected:
+	protected:
+
+	UFUNCTION(BlueprintCallable, Category = "Animation | Rates")
+	void SetAnimRatePlay(FVector WorldScale,
+		float RPB_Min,
+		float RPB_Max,
+		float RPM_Min,
+		float RPM_Max,
+		float RPS_Min,
+		float RPS_Max,
+		float MeshSizeB,
+		float MeshSizeM,
+		float MeshSizeS);
 
 	void DebugMes(int32 Key, FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
 

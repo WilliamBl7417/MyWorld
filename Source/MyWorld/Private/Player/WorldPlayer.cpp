@@ -130,19 +130,15 @@ void AWorldPlayer::LookEvent(const FInputActionValue& Value)
 	{
 		const FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-		// Add yaw (left/right) input
 		AddControllerYawInput(LookAxisVector.X * LookSensitivity);
 
-		// Add Pitch (Up/Down) input
 		AddControllerPitchInput(LookAxisVector.Y * LookSensitivity);
 	}
 }
 
 void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 {
-	// ----------------------------------------------------------------------
-	// 1. Lógica de la Regadera (EquipableWateringcan)
-	// ----------------------------------------------------------------------
+
 	if
 
 	(IsValid(EquipableWateringcan))
@@ -182,7 +178,6 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		{
 			CallTouchingBP(EquipableWateringcan);
 
-			// Si se adjunta correctamente, limpiamos el overlap genérico.
 			if (EquipableWateringcan->bIsInHand)
 			{
 				OverlappingInteractItem = nullptr;
@@ -191,9 +186,6 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		}
 	}
 
-	// ----------------------------------------------------------------------
-	// 2. Lógica de ItemInHand (Objetos genéricos)
-	// ----------------------------------------------------------------------
 	if (ItemInHand != nullptr)
 	{
 		if (ItemInHand->bImplementTouching)
@@ -208,9 +200,6 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		}
 	}
 
-	// ----------------------------------------------------------------------
-	// 3. Lógica de OverlappingInteractItem (Recoger objetos genéricos)
-	// ----------------------------------------------------------------------
 	if (IsValid(OverlappingInteractItem))
 	{
 		if (OverlappingInteractItem->bImplementTouching)
@@ -271,30 +260,27 @@ void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* O
 
 		if (NewInteractItem->IsA(AWateringcan::StaticClass()))
 		{
-			// *** NUEVA LÓGICA: Guardar la regadera en su variable específica. ***
-			// No debe ser limpiada en OnEndOverlap.
 			EquipableWateringcan = Cast<AWateringcan>(NewInteractItem);
 			EquipableWateringcan->SavePlayerRef(this);
 
-			// Si la regadera no está en mano, la mostramos como el objeto de overlap para Interacción (E)
-			// Si ya la tiene en mano, no hace falta.
+	
 			if (!EquipableWateringcan->bIsInHand)
 			{
 				OverlappingInteractItem = EquipableWateringcan;
 			}
 
 		}
-		// Guardar objetos interactivos genéricos
 		else if (NewInteractItem != ItemInHand)
 		{
 			if (OverlappingInteractItem == nullptr)
 			{
 				OverlappingInteractItem = NewInteractItem;
-				OverlappingInteractItem->SavePlayerRef(this);
+				NewInteractItem->SavePlayerRef(this);
+
 			}
 		}
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
 	}
 }
 
@@ -304,12 +290,8 @@ void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 
 	if (IsValid(EndedOverlapItem))
 	{
-		// Si es la regadera, no hacemos nada con la limpieza aquí, ya que la manejaremos
-		// a través de la interacción (InteractEvent) cuando se suelte.
 		if (EndedOverlapItem->IsA(AWateringcan::StaticClass()))
 		{
-			// Si la regadera sale del overlap, solo quitamos su referencia del OverlappingInteractItem genérico,
-			// pero NO la limpiamos del EquipableWateringcan
 			if (EndedOverlapItem == OverlappingInteractItem)
 			{
 				OverlappingInteractItem = nullptr;
@@ -317,7 +299,6 @@ void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 			return;
 		}
 
-		// Lógica para objetos interactivos genéricos (no regadera)
 		if (EndedOverlapItem == OverlappingInteractItem)
 		{
 			if (!EndedOverlapItem->bIsInHand)

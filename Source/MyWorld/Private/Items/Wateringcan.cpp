@@ -4,6 +4,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/MovementPlayerAtencionComponent.h"
 
 AWateringcan::AWateringcan()
 {
@@ -12,6 +13,9 @@ AWateringcan::AWateringcan()
 	{
 		StaticMeshComp->SetMobility(EComponentMobility::Movable);
 	}
+
+	MovementPlayerAtencionComponent = CreateDefaultSubobject<UMovementPlayerAtencionComponent>(TEXT("MovementPlayerAtencionComponent"));
+
 }
 
 void AWateringcan::TouchingBP_Implementation()
@@ -27,9 +31,13 @@ void AWateringcan::HandleAttachment()
 		return;
 	}
 
-	// adjunto/desadjuntado
 	if (!bIsInHand)
 	{
+		if (MovementPlayerAtencionComponent)
+		{
+			MovementPlayerAtencionComponent->DeactivateVisuals();
+		}
+
 		WorldPlayerRef->IsInHand = 0;
 		FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, true);
 
@@ -37,25 +45,30 @@ void AWateringcan::HandleAttachment()
 
 		if (StaticMeshComp) StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		if (ShadowMeshComp) ShadowMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		if (BoxComp) BoxComp->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
+		if (BoxComp) BoxComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		bIsInHand = true;
 		DebugMes(-1, TEXT("Wateringcan ATTACHED!"), FColor::Blue, 2.0f);
-
-		
 	}
-	else 
+	else
 	{
 		WorldPlayerRef->IsInHand = 50;
 
 		FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false);
-
 		RootComponent->DetachFromComponent(DetachRules);
+
 		if (StaticMeshComp) StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		if (BoxComp) BoxComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly); 
+		if (ShadowMeshComp) ShadowMeshComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		if (BoxComp) BoxComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
 		CleanPlayerRef();
 
 		bIsInHand = false;
-		DebugMes(-1, TEXT("Wateringcan DETACHED!"), FColor::Blue, 2.0f);
-		
+
+		if (MovementPlayerAtencionComponent)
+		{
+			MovementPlayerAtencionComponent->ActivateVisuals();
+		}
+
+		DebugMes(-1, TEXT("Wateringcan DETACHED and kept in place!"), FColor::Green, 2.0f);
 	}
-};
+}

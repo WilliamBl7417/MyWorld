@@ -35,7 +35,6 @@ public:
 	void LookEvent(const FInputActionValue& Value);
 	void InteractEvent(const FInputActionValue& Value);
 	void JumpEvent(const FInputActionValue& Value);
-
 	void RunStart(const FInputActionValue& Value);
 	void RunStop(const FInputActionValue& Value);
 
@@ -59,7 +58,6 @@ public:
 	void CallTouchingBP(AActor* ActorOverlap);
 	void CallWateringBP(AActor* ActorOverlap);
 
-	/*Functions to play montages or others stuffs*/
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Player Actions")
 	void playMontageAnim(UAnimMontage* MontageToPlay);
 
@@ -133,11 +131,11 @@ public:
 	AWateringcan* EquipableWateringcan = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
-	float IsInHand = 50;//usamos esto para el blendspace, para saber si tengo algo en la mano o no 50 si, y 0 no se settea en la clase Wateringcan
+	float IsInHand = 50;
 
-	protected:
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|Tick")
-		float DeltaSeconds;
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|Tick")
+	float DeltaSeconds;
 
 private:
 	void DebugMessage(int32 Key,FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
