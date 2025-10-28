@@ -99,6 +99,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
 	bool bIsInHand = false;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Attaching")
+	FName AttachSocketName;
+
 	/*References*/
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties | References")

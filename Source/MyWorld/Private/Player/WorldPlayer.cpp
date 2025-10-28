@@ -12,6 +12,7 @@
 #include "Items/Wateringcan.h"
 #include "Items/InteractItem.h"
 #include "Items/Flower.h"
+#include "Components/EquipableComponent.h"
 
 
 AWorldPlayer::AWorldPlayer()
@@ -56,35 +57,6 @@ AWorldPlayer::AWorldPlayer()
 
 }
 
-void AWorldPlayer::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(PlayerMappingContext, 0);
-		}
-	}
-	PlayerCharacter = Cast<ACharacter>(this);
-
-
-	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
-
-	CapsuleOverlap->OnComponentBeginOverlap.AddDynamic(this, &AWorldPlayer::OnBeginOverlap);
-	CapsuleOverlap->OnComponentEndOverlap.AddDynamic(this, &AWorldPlayer::OnEndOverlap);
-
-}
-
-void AWorldPlayer::DebugMessage(int32 Key, FString Message, FColor Color, float Duration)
-{
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(Key, Duration, Color, Message);
-	}
-}
-
 void AWorldPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -113,6 +85,123 @@ void AWorldPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	}
 }
 
+void AWorldPlayer::CallTouchingBP(AActor* ActorOverlap)
+{
+	if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
+	{
+		ITouchingInterface::Execute_TouchingBP(ActorOverlap);
+	}
+}
+
+void AWorldPlayer::CallWateringBP(AActor* ActorOverlap)
+{
+	if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
+	{
+		ITouchingInterface::Execute_WateringPlantBP(ActorOverlap);
+	}
+}
+
+void AWorldPlayer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(PlayerMappingContext, 0);
+		}
+	}
+	PlayerCharacter = Cast<ACharacter>(this);
+
+
+	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
+
+	CapsuleOverlap->OnComponentBeginOverlap.AddDynamic(this, &AWorldPlayer::OnBeginOverlap);
+	CapsuleOverlap->OnComponentEndOverlap.AddDynamic(this, &AWorldPlayer::OnEndOverlap);
+
+}
+
+void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor == this) { return; }
+
+	OverlappingActor = OtherActor;
+
+	if (OtherActor->IsA(AInteractItem::StaticClass()))
+	{
+		AInteractItem* NewInteractItem = Cast<AInteractItem>(OtherActor);
+
+		if (NewInteractItem->FindComponentByClass<UEquipableComponent>())
+		{
+			EquipableObject = NewInteractItem;
+			EquipableObject->SavePlayerRef(this);
+
+			if (!EquipableObject->bIsInHand)
+			{
+				OverlappingInteractItem = EquipableObject;
+			}
+		}
+
+		//if (NewInteractItem->IsA(AWateringcan::StaticClass()))
+		//{
+		//	EquipableObject = Cast<AWateringcan>(NewInteractItem);
+		//	EquipableObject->SavePlayerRef(this);
+
+		//	if (!EquipableObject->bIsInHand)
+		//	{
+		//		OverlappingInteractItem = EquipableObject;
+		//	}
+		//}
+		else if (NewInteractItem != ItemInHand)
+		{
+			if (OverlappingInteractItem == nullptr)
+			{
+				OverlappingInteractItem = NewInteractItem;
+				NewInteractItem->SavePlayerRef(this);
+
+			}
+		}
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
+	}
+}
+
+void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+
+	OverlappingActor = nullptr;
+
+
+	AInteractItem* EndedOverlapItem = Cast<AInteractItem>(OtherActor);
+
+	if (IsValid(EndedOverlapItem))
+	{
+		if (EndedOverlapItem->IsA(AWateringcan::StaticClass()))
+		{
+			if (EndedOverlapItem == OverlappingInteractItem)
+			{
+				OverlappingInteractItem = nullptr;
+
+			}
+			return;
+		}
+
+		if (EndedOverlapItem == OverlappingInteractItem)
+		{
+			if (!EndedOverlapItem->bIsInHand)
+			{
+				EndedOverlapItem->CleanPlayerRef();
+				OverlappingInteractItem = nullptr;
+				DebugMessage(-1, FString::Printf(TEXT("End Overlap y limpieza de: %s"), *OtherActor->GetName()), FColor::Yellow, 2.f);
+			}
+		}
+	}
+
+
+
+}
+
 void AWorldPlayer::MoveEvent(const FInputActionValue& Value)
 {
 	const FVector2D MovementVector = Value.Get<FVector2D>();
@@ -138,12 +227,9 @@ void AWorldPlayer::LookEvent(const FInputActionValue& Value)
 
 void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 {
-
-	if
-
-	(IsValid(EquipableWateringcan))
+	if(IsValid(EquipableObject))
 	{
-		if (EquipableWateringcan->bIsInHand)
+		if (EquipableObject->bIsInHand)//esto hay que ajustarlo para poner la candela en su lugar
 		{
 			if (OverlappingInteractItem != nullptr && OverlappingInteractItem->bImplementWhatering)
 			{
@@ -152,10 +238,14 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 					AFlower* Flower = Cast<AFlower>(OverlappingInteractItem);
 					if (Flower->bWasWatered == false)
 					{
-						EquipableWateringcan->bWasWateredRef = Flower->bWasWatered;
-						CallWateringBP(OverlappingInteractItem);
-						CallWateringBP(EquipableWateringcan);
-						EquipableWateringcan->bWasWateredRef = Flower->bWasWatered;
+						if (EquipableObject->IsA<AWateringcan>())
+						{
+							AWateringcan* WateringCan = Cast<AWateringcan>(EquipableObject);
+							WateringCan->bWasWateredRef = Flower->bWasWatered;
+							CallWateringBP(OverlappingInteractItem);
+							CallWateringBP(EquipableObject);
+							WateringCan->bWasWateredRef = Flower->bWasWatered;
+						}
 					}
 					else
 					{
@@ -165,20 +255,20 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 				return;
 			}
 
-			CallTouchingBP(EquipableWateringcan);
+			CallTouchingBP(EquipableObject);
 
-			if (!EquipableWateringcan->bIsInHand)
+			if (!EquipableObject->bIsInHand)
 			{
-				EquipableWateringcan = nullptr;
+				EquipableObject = nullptr;
 			}
 			return;
 		}
 
-		else if (OverlappingInteractItem == EquipableWateringcan)
+		else if (OverlappingInteractItem == EquipableObject)
 		{
-			CallTouchingBP(EquipableWateringcan);
+			CallTouchingBP(EquipableObject);
 
-			if (EquipableWateringcan->bIsInHand)
+			if (EquipableObject->bIsInHand)
 			{
 				OverlappingInteractItem = nullptr;
 			}
@@ -186,7 +276,7 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		}
 	}
 
-	if (ItemInHand != nullptr)
+	if (ItemInHand != nullptr) //
 	{
 		if (ItemInHand->bImplementTouching)
 		{
@@ -213,11 +303,6 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 			return;
 		}
 	}
-
-	//DebugMessage(-1, FString::Printf(TEXT("Interact Event Triggered: Overlap(%s), Hand(%s), Can(%s)"),
-	//	OverlappingInteractItem ? *OverlappingInteractItem->GetName() : TEXT("null"),
-	//	ItemInHand ? *ItemInHand->GetName() : TEXT("null"),
-	//	EquipableWateringcan ? *EquipableWateringcan->GetName() : TEXT("null")), FColor::Cyan, 5.f);
 }
 
 void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
@@ -248,93 +333,6 @@ void AWorldPlayer::RunStopBP_Implementation()
 	bIsRunning = false;
 }
 
-void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (OtherActor == this) { return; }
-
-	OverlappingActor = OtherActor;
-
-	if (OtherActor->IsA(AInteractItem::StaticClass()))
-	{
-		AInteractItem* NewInteractItem = Cast<AInteractItem>(OtherActor);
-
-		if (NewInteractItem->IsA(AWateringcan::StaticClass()))
-		{
-			EquipableWateringcan = Cast<AWateringcan>(NewInteractItem);
-			EquipableWateringcan->SavePlayerRef(this);
-
-	
-			if (!EquipableWateringcan->bIsInHand)
-			{
-				OverlappingInteractItem = EquipableWateringcan;
-			}
-
-		}
-		else if (NewInteractItem != ItemInHand)
-		{
-			if (OverlappingInteractItem == nullptr)
-			{
-				OverlappingInteractItem = NewInteractItem;
-				NewInteractItem->SavePlayerRef(this);
-
-			}
-		}
-
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
-	}
-}
-
-void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	AInteractItem* EndedOverlapItem = Cast<AInteractItem>(OtherActor);
-
-	if (IsValid(EndedOverlapItem))
-	{
-		if (EndedOverlapItem->IsA(AWateringcan::StaticClass()))
-		{
-			if (EndedOverlapItem == OverlappingInteractItem)
-			{
-				OverlappingInteractItem = nullptr;
-			}
-			return;
-		}
-
-		if (EndedOverlapItem == OverlappingInteractItem)
-		{
-			if (!EndedOverlapItem->bIsInHand)
-			{
-				EndedOverlapItem->CleanPlayerRef();
-				OverlappingInteractItem = nullptr;
-				DebugMessage(-1, FString::Printf(TEXT("End Overlap y limpieza de: %s"), *OtherActor->GetName()), FColor::Yellow, 2.f);
-			}
-		}
-	}
-}
-//{
-//
-//	AInteractItem* EndedOverlapItem = Cast<AInteractItem>(OtherActor);
-//
-//	if (!EndedOverlapItem->IsA(AWateringcan::StaticClass()))
-//	{
-//		OverlappingInteractItem = nullptr;
-//	}
-//}
-void AWorldPlayer::CallTouchingBP(AActor* ActorOverlap)
-{
-	if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
-	{
-		ITouchingInterface::Execute_TouchingBP(ActorOverlap);
-	}
-}
-
-void AWorldPlayer::CallWateringBP(AActor* ActorOverlap)
-{
-	if (ActorOverlap && ActorOverlap->GetClass()->ImplementsInterface(UTouchingInterface::StaticClass()))
-	{
-		ITouchingInterface::Execute_WateringPlantBP(ActorOverlap);
-	}
-}
-
 void AWorldPlayer::playMontageAnim_Implementation(UAnimMontage* MontageToPlay)
 {
 	if (MontageToPlay == nullptr)
@@ -347,4 +345,10 @@ void AWorldPlayer::playMontageAnim_Implementation(UAnimMontage* MontageToPlay)
 	}
 }
 
-
+void AWorldPlayer::DebugMessage(int32 Key, FString Message, FColor Color, float Duration)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(Key, Duration, Color, Message);
+	}
+}

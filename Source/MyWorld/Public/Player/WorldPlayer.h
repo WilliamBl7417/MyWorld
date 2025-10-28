@@ -22,15 +22,46 @@ class MYWORLD_API AWorldPlayer : public ACharacter
 	GENERATED_BODY()
 
 public:
-
 	AWorldPlayer();
-
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void CallTouchingBP(AActor* ActorOverlap);
+	void CallWateringBP(AActor* ActorOverlap);
+
+	/* References */
+	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
+	AActor* OverlappingActor;
+	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
+	ACharacter* PlayerCharacter;
+	/* References */
+
+
+	/* References Interactable Objects */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
+	AInteractItem* OverlappingInteractItem = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
+	AInteractItem* ItemInHand = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
+	AInteractItem* EquipableObject = nullptr;
+	/* References Interactable Objects */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
+	float IsInHand = 50;
+
+
+protected:
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+		bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	/* Inputs // IMC Implementation*/
-
 	void MoveEvent(const FInputActionValue& Value);
 	void LookEvent(const FInputActionValue& Value);
 	void InteractEvent(const FInputActionValue& Value);
@@ -45,25 +76,10 @@ public:
 	void RunStopBP();
 	void RunStopBP_Implementation();
 
-
-	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-		bool bFromSweep, const FHitResult& SweepResult) ;
-
-	UFUNCTION()
-	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-	void CallTouchingBP(AActor* ActorOverlap);
-	void CallWateringBP(AActor* ActorOverlap);
-
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Player Actions")
 	void playMontageAnim(UAnimMontage* MontageToPlay);
 
 	void playMontageAnim_Implementation(UAnimMontage* MontageToPlay);
-
-
 
 	/* Input */
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -75,35 +91,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* InteractAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* JumpAction;	
+	UInputAction* JumpAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* RunAction;
 
-	/* References */
-	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
-	AActor* OverlappingActor;
-	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
-	ACharacter* PlayerCharacter;
-
-	/* Camera Components*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	USpringArmComponent* CameraBoom;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UCameraComponent* FollowCamera;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UCapsuleComponent* CapsuleOverlap;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	USkeletalMeshComponent* ClothesMesh;
-	/* Variables */
-
-
-	/* Camera Variables */
-	UPROPERTY(EditAnywhere, Category = "Player Properties|Camera")
-	float LookSensitivity = 1.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Camera")
-	float MinCameraPitch = -60.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Camera")
-	float MaxCameraPitch = 45.0f;
+	// Control de aceleración correr caminar
+	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
+	float SpeedInterpRate;
+	bool bIsRunning = false;
 
 	/* Movement Variables */
 	UPROPERTY(EditDefaultsOnly, Category = "Player Properties|Movement")
@@ -113,29 +108,24 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Player Properties|Movement")
 	float CurrentSpeed;
 
-	// Control de aceleración correr caminar
-	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
-	float SpeedInterpRate; 
+	/* Camera Components*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USpringArmComponent* CameraBoom;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UCameraComponent* FollowCamera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UCapsuleComponent* CapsuleOverlap;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USkeletalMeshComponent* ClothesMesh;
 
-	bool bIsRunning = false;
+	/* Camera Variables */
+	UPROPERTY(EditAnywhere, Category = "Player Properties|Camera")
+	float LookSensitivity = 1.0f;
 
-	virtual void BeginPlay() override;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
-	AInteractItem* OverlappingInteractItem = nullptr;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
-	AInteractItem* ItemInHand = nullptr;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
-	AWateringcan* EquipableWateringcan = nullptr;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
-	float IsInHand = 50;
-
-protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|Tick")
 	float DeltaSeconds;
+
+
 
 private:
 	void DebugMessage(int32 Key,FString Message, FColor Color = FColor::Green, float Duration = 2.0f);

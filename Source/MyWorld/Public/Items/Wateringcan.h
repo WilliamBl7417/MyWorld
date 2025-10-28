@@ -5,6 +5,7 @@
 #include "Items/InteractItem.h"
 #include "Wateringcan.generated.h"
 class UMovementPlayerAtencionComponent;
+class UEquipableComponent;
 
 /**
  * */
@@ -18,10 +19,10 @@ public:
 	AWateringcan();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wateringcan Properties")
-	FName AttachSocketName;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wateringcan Properties")
 	bool bWasWateredRef = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Equipable Properties")
+	UEquipableComponent* EquipableComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement Properties")
 	UMovementPlayerAtencionComponent* MovementPlayerAtencionComponent;
@@ -29,9 +30,6 @@ public:
 protected:
 
 	virtual void TouchingBP_Implementation() override;
-
-	UFUNCTION(BlueprintCallable, Category = "Wateringcan Logic")
-	void HandleAttachment();
 
 
 };
