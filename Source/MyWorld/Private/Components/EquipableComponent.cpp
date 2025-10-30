@@ -17,9 +17,10 @@ UEquipableComponent::UEquipableComponent()
 void UEquipableComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 	
 }
-
 
 void UEquipableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

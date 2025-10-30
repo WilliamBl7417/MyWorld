@@ -132,16 +132,48 @@ void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* O
 	{
 		AInteractItem* NewInteractItem = Cast<AInteractItem>(OtherActor);
 
-		if (NewInteractItem->FindComponentByClass<UEquipableComponent>())
+		if (!EquipableObject )
 		{
-			EquipableObject = NewInteractItem;
-			EquipableObject->SavePlayerRef(this);
-
-			if (!EquipableObject->bIsInHand)
+			if (NewInteractItem->FindComponentByClass<UEquipableComponent>())
 			{
-				OverlappingInteractItem = EquipableObject;
+				EquipableObject = NewInteractItem;
+				EquipableObject->SavePlayerRef(this);
+
+				if (!EquipableObject->bIsInHand)
+				{
+					OverlappingInteractItem = EquipableObject;
+				}
 			}
+
 		}
+		else if (EquipableObject)
+		{
+			if (NewInteractItem->FindComponentByClass<UEquipableComponent>() && NewInteractItem != EquipableObject)
+			{
+				EquipableObject = NewInteractItem;
+				EquipableObject->SavePlayerRef(this);
+				if (!EquipableObject->bIsInHand)
+				{
+					OverlappingInteractItem = EquipableObject;
+				}
+			}
+
+		}
+
+		//if (!EquipableObject)
+		//{
+		//	if (NewInteractItem->FindComponentByClass<UEquipableComponent>())
+		//	{
+		//		EquipableObject = NewInteractItem;
+		//		EquipableObject->SavePlayerRef(this);
+
+		//		if (!EquipableObject->bIsInHand)
+		//		{
+		//			OverlappingInteractItem = EquipableObject;
+		//		}
+		//	}
+
+		//}
 
 		//if (NewInteractItem->IsA(AWateringcan::StaticClass()))
 		//{
@@ -153,15 +185,17 @@ void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* O
 		//		OverlappingInteractItem = EquipableObject;
 		//	}
 		//}
-		else if (NewInteractItem != ItemInHand)
-		{
-			if (OverlappingInteractItem == nullptr)
-			{
-				OverlappingInteractItem = NewInteractItem;
-				NewInteractItem->SavePlayerRef(this);
+		// 
+		// 
+		//else if (NewInteractItem != ItemInHand)//si es otro objeto
+		//{
+		//	if (OverlappingInteractItem == nullptr)
+		//	{
+		//		OverlappingInteractItem = NewInteractItem;
+		//		NewInteractItem->SavePlayerRef(this);
 
-			}
-		}
+		//	}
+		//}
 
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
 	}
@@ -191,7 +225,7 @@ void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 		{
 			if (!EndedOverlapItem->bIsInHand)
 			{
-				EndedOverlapItem->CleanPlayerRef();
+				//EndedOverlapItem->CleanPlayerRef();
 				OverlappingInteractItem = nullptr;
 				DebugMessage(-1, FString::Printf(TEXT("End Overlap y limpieza de: %s"), *OtherActor->GetName()), FColor::Yellow, 2.f);
 			}
@@ -276,33 +310,33 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		}
 	}
 
-	if (ItemInHand != nullptr) //
-	{
-		if (ItemInHand->bImplementTouching)
-		{
-			CallTouchingBP(ItemInHand);
+	//if (ItemInHand != nullptr) //
+	//{
+	//	if (ItemInHand->bImplementTouching)
+	//	{
+	//		CallTouchingBP(ItemInHand);
 
-			if (!ItemInHand->bIsInHand)
-			{
-				ItemInHand = nullptr;
-			}
-			return;
-		}
-	}
+	//		if (!ItemInHand->bIsInHand)
+	//		{
+	//			ItemInHand = nullptr;
+	//		}
+	//		return;
+	//	}
+	//}
 
-	if (IsValid(OverlappingInteractItem))
-	{
-		if (OverlappingInteractItem->bImplementTouching)
-		{
-			CallTouchingBP(OverlappingInteractItem);
-			if (OverlappingInteractItem->bIsInHand)
-			{
-				ItemInHand = OverlappingInteractItem;
-				OverlappingInteractItem = nullptr;
-			}
-			return;
-		}
-	}
+	//if (IsValid(OverlappingInteractItem))
+	//{
+	//	if (OverlappingInteractItem->bImplementTouching)
+	//	{
+	//		CallTouchingBP(OverlappingInteractItem);
+	//		if (OverlappingInteractItem->bIsInHand)
+	//		{
+	//			ItemInHand = OverlappingInteractItem;
+	//			OverlappingInteractItem = nullptr;
+	//		}
+	//		return;
+	//	}
+	//}
 }
 
 void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
