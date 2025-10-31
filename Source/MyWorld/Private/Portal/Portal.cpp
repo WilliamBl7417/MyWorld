@@ -30,6 +30,7 @@ APortal::APortal()
 
 	ChangeLevelOverlap = CreateDefaultSubobject<UBoxComponent>(TEXT("ChangeLevelOverlap"));
 	ChangeLevelOverlap->SetupAttachment(RootComponent);
+	////a line just for test after reinstaling windows
 }
 
 void APortal::BeginPlay()
