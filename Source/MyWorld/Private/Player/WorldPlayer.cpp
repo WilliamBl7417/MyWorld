@@ -12,12 +12,14 @@
 #include "Items/Wateringcan.h"
 #include "Items/InteractItem.h"
 #include "Items/Flower.h"
+#include "Items/Candle.h"
+#include "Items/CandlePedestal.h"
 #include "Components/EquipableComponent.h"
 
 
 AWorldPlayer::AWorldPlayer()
 {
- 	
+
 	PrimaryActorTick.bCanEverTick = true;
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -128,76 +130,31 @@ void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* O
 
 	OverlappingActor = OtherActor;
 
-	if (OtherActor->IsA(AInteractItem::StaticClass()))
+
+	if (OverlappingActor->IsA(AInteractItem::StaticClass()))
 	{
 		AInteractItem* NewInteractItem = Cast<AInteractItem>(OtherActor);
 
-		if (!EquipableObject )
+		NewInteractItem->SavePlayerRef(this);
+
+		OverlappingInteractItem = NewInteractItem;
+
+		if (NewInteractItem->FindComponentByClass<UEquipableComponent>() && !ItemInHand)
 		{
-			if (NewInteractItem->FindComponentByClass<UEquipableComponent>())
-			{
-				EquipableObject = NewInteractItem;
-				EquipableObject->SavePlayerRef(this);
-
-				if (!EquipableObject->bIsInHand)
-				{
-					OverlappingInteractItem = EquipableObject;
-				}
-			}
-
+			EquipableObject = NewInteractItem;
 		}
-		else if (EquipableObject)
+		if (NewInteractItem->IsA(ACandle::StaticClass()))
 		{
-			if (NewInteractItem->FindComponentByClass<UEquipableComponent>() && NewInteractItem != EquipableObject)
+			ACandle* Candle = Cast<ACandle>(NewInteractItem);
+			if (Candle && Candle->bIsPlaced)
 			{
-				EquipableObject = NewInteractItem;
-				EquipableObject->SavePlayerRef(this);
-				if (!EquipableObject->bIsInHand)
-				{
-					OverlappingInteractItem = EquipableObject;
-				}
+				EquipableObject = nullptr;
+				OverlappingInteractItem = nullptr;
 			}
 
 		}
 
-		//if (!EquipableObject)
-		//{
-		//	if (NewInteractItem->FindComponentByClass<UEquipableComponent>())
-		//	{
-		//		EquipableObject = NewInteractItem;
-		//		EquipableObject->SavePlayerRef(this);
 
-		//		if (!EquipableObject->bIsInHand)
-		//		{
-		//			OverlappingInteractItem = EquipableObject;
-		//		}
-		//	}
-
-		//}
-
-		//if (NewInteractItem->IsA(AWateringcan::StaticClass()))
-		//{
-		//	EquipableObject = Cast<AWateringcan>(NewInteractItem);
-		//	EquipableObject->SavePlayerRef(this);
-
-		//	if (!EquipableObject->bIsInHand)
-		//	{
-		//		OverlappingInteractItem = EquipableObject;
-		//	}
-		//}
-		// 
-		// 
-		//else if (NewInteractItem != ItemInHand)//si es otro objeto
-		//{
-		//	if (OverlappingInteractItem == nullptr)
-		//	{
-		//		OverlappingInteractItem = NewInteractItem;
-		//		NewInteractItem->SavePlayerRef(this);
-
-		//	}
-		//}
-
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap con: %s"), *OtherActor->GetName()));
 	}
 }
 
@@ -205,34 +162,39 @@ void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 {
 
 	OverlappingActor = nullptr;
+	OverlappingInteractItem = nullptr;
 
-
-	AInteractItem* EndedOverlapItem = Cast<AInteractItem>(OtherActor);
-
-	if (IsValid(EndedOverlapItem))
+	if (!ItemInHand)
 	{
-		if (EndedOverlapItem->IsA(AWateringcan::StaticClass()))
-		{
-			if (EndedOverlapItem == OverlappingInteractItem)
-			{
-				OverlappingInteractItem = nullptr;
+		EquipableObject = nullptr;
 
-			}
-			return;
-		}
-
-		if (EndedOverlapItem == OverlappingInteractItem)
-		{
-			if (!EndedOverlapItem->bIsInHand)
-			{
-				//EndedOverlapItem->CleanPlayerRef();
-				OverlappingInteractItem = nullptr;
-				DebugMessage(-1, FString::Printf(TEXT("End Overlap y limpieza de: %s"), *OtherActor->GetName()), FColor::Yellow, 2.f);
-			}
-		}
 	}
 
 
+	//AInteractItem* EndedOverlapItem = Cast<AInteractItem>(OtherActor);
+
+	//if (IsValid(EndedOverlapItem))
+	//{
+	//	if (EndedOverlapItem->IsA(AWateringcan::StaticClass()))
+	//	{
+	//		if (EndedOverlapItem == OverlappingInteractItem)
+	//		{
+	//			OverlappingInteractItem = nullptr;
+
+	//		}
+	//		return;
+	//	}
+
+	//	if (EndedOverlapItem == OverlappingInteractItem)
+	//	{
+	//		if (!EndedOverlapItem->bIsInHand)
+	//		{
+	//			//EndedOverlapItem->CleanPlayerRef();
+	//			OverlappingInteractItem = nullptr;
+	//			DebugMessage(-1, FString::Printf(TEXT("End Overlap y limpieza de: %s"), *OtherActor->GetName()), FColor::Yellow, 2.f);
+	//		}
+	//	}
+	//}
 
 }
 
@@ -261,87 +223,56 @@ void AWorldPlayer::LookEvent(const FInputActionValue& Value)
 
 void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 {
-	if(IsValid(EquipableObject))
+	if (OverlappingInteractItem && EquipableObject && !ItemInHand)//equipo el objeto si no tengo nada en la mano
 	{
-		if (EquipableObject->bIsInHand)//esto hay que ajustarlo para poner la candela en su lugar
+		if (EquipableObject && EquipableObject->FindComponentByClass<UEquipableComponent>())
 		{
-			if (OverlappingInteractItem != nullptr && OverlappingInteractItem->bImplementWhatering)
-			{
-				if (OverlappingInteractItem->IsA(AFlower::StaticClass()))
-				{
-					AFlower* Flower = Cast<AFlower>(OverlappingInteractItem);
-					if (Flower->bWasWatered == false)
-					{
-						if (EquipableObject->IsA<AWateringcan>())
-						{
-							AWateringcan* WateringCan = Cast<AWateringcan>(EquipableObject);
-							WateringCan->bWasWateredRef = Flower->bWasWatered;
-							CallWateringBP(OverlappingInteractItem);
-							CallWateringBP(EquipableObject);
-							WateringCan->bWasWateredRef = Flower->bWasWatered;
-						}
-					}
-					else
-					{
-						CallTouchingBP(OverlappingInteractItem);
-					}
-				}
-				return;
-			}
-
-			CallTouchingBP(EquipableObject);
-
-			if (!EquipableObject->bIsInHand)
-			{
-				EquipableObject = nullptr;
-			}
-			return;
-		}
-
-		else if (OverlappingInteractItem == EquipableObject)
-		{
-			CallTouchingBP(EquipableObject);
-
-			if (EquipableObject->bIsInHand)
-			{
-				OverlappingInteractItem = nullptr;
-			}
-			return;
+			EquipableObject->TouchingBP_Implementation();
 		}
 	}
+	else if (!OverlappingInteractItem && ItemInHand)//suelo el objeto que tengo en la mano si no hay nada con lo que interactuar
+	{
+		if (EquipableObject && EquipableObject->FindComponentByClass<UEquipableComponent>())
+		{
+			EquipableObject->TouchingBP_Implementation();
+		}
+	}
+	else if (!EquipableObject && OverlappingInteractItem)//si no tengo nada equipado y hay un objeto con el que interactuar, llamo a su BP
+	{
+		CallTouchingBP(OverlappingInteractItem);
 
-	//if (ItemInHand != nullptr) //
-	//{
-	//	if (ItemInHand->bImplementTouching)
-	//	{
-	//		CallTouchingBP(ItemInHand);
-
-	//		if (!ItemInHand->bIsInHand)
-	//		{
-	//			ItemInHand = nullptr;
-	//		}
-	//		return;
-	//	}
-	//}
-
-	//if (IsValid(OverlappingInteractItem))
-	//{
-	//	if (OverlappingInteractItem->bImplementTouching)
-	//	{
-	//		CallTouchingBP(OverlappingInteractItem);
-	//		if (OverlappingInteractItem->bIsInHand)
-	//		{
-	//			ItemInHand = OverlappingInteractItem;
-	//			OverlappingInteractItem = nullptr;
-	//		}
-	//		return;
-	//	}
-	//}
+	}
+	else if (ItemInHand && OverlappingInteractItem)
+	{
+		if (ItemInHand->IsA(AWateringcan::StaticClass()) && OverlappingInteractItem->IsA(AFlower::StaticClass()))
+		{
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Watering Plant"));
+			}
+			CallWateringBP(OverlappingInteractItem);
+		}
+		else if (ItemInHand->IsA(ACandle::StaticClass()) && OverlappingInteractItem->IsA(ACandlePedestal::StaticClass()))
+		{
+			ACandle* Candle = Cast<ACandle>(ItemInHand);
+			ACandlePedestal* CandlePedestal = Cast<ACandlePedestal>(OverlappingInteractItem);
+			if (CandlePedestal && Candle)
+			{
+				Candle->EquipableComponent->EquiptToCandlePedestal(Candle);
+				CandlePedestal->PlaceCandleBP_Implementation(Candle);
+			}
+			//ahora hay que hacer que al poner la candela en su lugar no pueda volver a recogerla
+		}
+		else if (ItemInHand->IsA(ACandle::StaticClass()) && OverlappingInteractItem->IsA(AInteractItem::StaticClass()))
+		{
+			CallTouchingBP(OverlappingInteractItem);
+		}
+	}
 }
 
 void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
 {
-	if(GEngine)
+	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Jump Event Triggered"));
 	}

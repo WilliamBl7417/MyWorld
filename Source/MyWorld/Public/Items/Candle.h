@@ -10,7 +10,7 @@ class UMovementPlayerAtencionComponent;
 class UEquipableComponent;
 
 /**
- * 
+ *
  */
 UCLASS()
 class MYWORLD_API ACandle : public AInteractItem
@@ -22,10 +22,17 @@ public:
 
 	virtual void TouchingBP_Implementation() override;
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Candle")
+	void DestroyCandle();
+	virtual void DestroyCandle_Implementation();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UMovementPlayerAtencionComponent* MovementPlayerAtentionComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UEquipableComponent* EquipableComponent;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Candle")
+	bool bIsPlaced = false;
+
 };

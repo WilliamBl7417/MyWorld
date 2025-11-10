@@ -27,9 +27,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement Properties")
 	UMovementPlayerAtencionComponent* MovementPlayerAtencionComponent;
 
-protected:
-
 	virtual void TouchingBP_Implementation() override;
+
+	virtual void WateringPlantBP_Implementation() override;
 
 
 };

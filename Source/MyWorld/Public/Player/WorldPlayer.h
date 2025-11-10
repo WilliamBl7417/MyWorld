@@ -128,6 +128,6 @@ protected:
 
 
 private:
-	void DebugMessage(int32 Key,FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
+	void DebugMessage(int32 Key, FString Message, FColor Color = FColor::Green, float Duration = 2.0f);
 
 };

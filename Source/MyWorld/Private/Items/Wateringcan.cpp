@@ -26,3 +26,8 @@ void AWateringcan::TouchingBP_Implementation()
 {
 	EquipableComponent->HandleAttachment();
 }
+
+void AWateringcan::WateringPlantBP_Implementation()
+{
+	Super::WateringPlantBP_Implementation();
+}
