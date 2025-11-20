@@ -33,7 +33,8 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 	bool bAttachToStaticMesh,
 	FVector LocationOverride,
 	FRotator RotationOverride,
-	FVector ScaleOverride
+	FVector ScaleOverride,
+	UNiagaraComponent*& OutNiagaraComponent
 )
 {
 	// Si TargetActor es null, usa el dueño del componente
@@ -57,6 +58,7 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 		if (CurrentNiagaraComponent)
 		{
 			DestroyCurrentParticles();
+
 		}
 
 		bool bAttached = false;
@@ -170,11 +172,7 @@ void UPlaySoundAndParticles::DestroyCurrentParticles()
 	}
 }
 
-
-// Called every frame
 void UPlaySoundAndParticles::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }

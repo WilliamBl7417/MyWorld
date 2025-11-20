@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"D:\\UEProjects\\MyWorld\\Source\\MyWorld\\MyWorld.Build.cs",
+		"D:\\UEProjects\\MyWorld\\Source\\MyWorld.Target.cs",
+		"D:\\UEProjects\\MyWorld\\Source\\MyWorldEditor.Target.cs"
+	],
+	"EngineVersion": "5.6.1"
+}

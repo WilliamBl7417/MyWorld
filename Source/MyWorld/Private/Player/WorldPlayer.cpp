@@ -251,6 +251,7 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Watering Plant"));
 			}
 			CallWateringBP(OverlappingInteractItem);
+			CallWateringBP(ItemInHand);
 		}
 		else if (ItemInHand->IsA(ACandle::StaticClass()) && OverlappingInteractItem->IsA(ACandlePedestal::StaticClass()))
 		{
@@ -261,9 +262,12 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 				Candle->EquipableComponent->EquiptToCandlePedestal(Candle);
 				CandlePedestal->PlaceCandleBP_Implementation(Candle);
 			}
-			//ahora hay que hacer que al poner la candela en su lugar no pueda volver a recogerla
 		}
 		else if (ItemInHand->IsA(ACandle::StaticClass()) && OverlappingInteractItem->IsA(AInteractItem::StaticClass()))
+		{
+			CallTouchingBP(OverlappingInteractItem);
+		}
+		else if (ItemInHand->IsA(AWateringcan::StaticClass()) && OverlappingInteractItem->IsA(AInteractItem::StaticClass()) && !OverlappingInteractItem->IsA(AFlower::StaticClass()))
 		{
 			CallTouchingBP(OverlappingInteractItem);
 		}

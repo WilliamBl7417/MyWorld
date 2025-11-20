@@ -45,7 +45,8 @@ protected:
 		bool bAttachToStaticMesh,
 		FVector LocationOverride,
 		FRotator RotationOverride,
-		FVector ScaleOverridee
+		FVector ScaleOverridee,
+		UNiagaraComponent*& OutNiagaraComponent
 	);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction | Sounds N Particles")

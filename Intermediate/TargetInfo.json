@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "MyWorld",
+			"Path": "..\\Source\\MyWorld.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "MyWorldEditor",
+			"Path": "..\\Source\\MyWorldEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

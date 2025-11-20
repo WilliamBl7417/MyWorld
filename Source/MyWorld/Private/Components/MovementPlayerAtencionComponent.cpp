@@ -72,6 +72,7 @@ void UMovementPlayerAtencionComponent::ActivateVisuals()
     if (GetOwner() && GetOwner()->GetRootComponent())
     {
         InitialRelativeLocation = GetOwner()->GetActorLocation();
+		TargetMesh->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
     }
 }
 
