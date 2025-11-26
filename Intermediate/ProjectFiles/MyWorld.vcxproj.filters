@@ -13,6 +13,15 @@
     </None>
     <None Include="..\..\.gitattributes" />
     <None Include="..\..\README.md" />
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
     <Filter Include="Source\MyWorld">
       <UniqueIdentifier>{E0FDC03D-0BF9-37D5-86DC-84D598DC799B}</UniqueIdentifier>
     </Filter>
@@ -61,6 +70,9 @@
     <ClCompile Include="..\..\Source\MyWorld\Private\Items\CandlePedestal.cpp">
       <Filter>Source\MyWorld\Private\Items</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\MyWorld\Private\Items\Cartel.cpp">
+      <Filter>Source\MyWorld\Private\Items</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\MyWorld\Private\Items\Flower.cpp">
       <Filter>Source\MyWorld\Private\Items</Filter>
     </ClCompile>
@@ -75,6 +87,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\MyWorld\Private\Items\Wateringcan.cpp">
       <Filter>Source\MyWorld\Private\Items</Filter>
+    </ClCompile>
+    <Filter Include="Source\MyWorld\Private\Managers">
+      <UniqueIdentifier>{025D8BF2-9706-3A11-B81A-E1D9AE2C8114}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\MyWorld\Private\Managers\TextManager.cpp">
+      <Filter>Source\MyWorld\Private\Managers</Filter>
     </ClCompile>
     <Filter Include="Source\MyWorld\Private\Player">
       <UniqueIdentifier>{706FB58C-F74C-37EF-B67C-81473EEE8A45}</UniqueIdentifier>
@@ -127,6 +145,9 @@
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\CandlePedestal.h">
       <Filter>Source\MyWorld\Public\Items</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\MyWorld\Public\Items\Cartel.h">
+      <Filter>Source\MyWorld\Public\Items</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\Flower.h">
       <Filter>Source\MyWorld\Public\Items</Filter>
     </ClInclude>
@@ -141,6 +162,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\Wateringcan.h">
       <Filter>Source\MyWorld\Public\Items</Filter>
+    </ClInclude>
+    <Filter Include="Source\MyWorld\Public\Managers">
+      <UniqueIdentifier>{67777476-0790-3B3A-A2AF-AB39EB2FE43D}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\MyWorld\Public\Managers\TextManager.h">
+      <Filter>Source\MyWorld\Public\Managers</Filter>
     </ClInclude>
     <Filter Include="Source\MyWorld\Public\Player">
       <UniqueIdentifier>{4B4E6DC9-8001-351A-8F82-B51AC51B85BF}</UniqueIdentifier>

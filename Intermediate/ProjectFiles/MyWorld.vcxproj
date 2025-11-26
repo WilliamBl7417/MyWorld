@@ -400,6 +400,8 @@
     <None Include="..\..\Source\MyWorldEditor.Target.cs"/>
     <None Include="..\..\.gitattributes"/>
     <None Include="..\..\README.md"/>
+    <None Include="..\..\Config\DefaultEngine.ini"/>
+    <None Include="..\..\Config\DefaultInput.ini"/>
     <None Include="..\..\Source\MyWorld\MyWorld.Build.cs"/>
     <ClCompile Include="..\..\Source\MyWorld\MyWorld.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -426,6 +428,9 @@
     <ClCompile Include="..\..\Source\MyWorld\Private\Items\CandlePedestal.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\MyWorld\Private\Items\Cartel.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\MyWorld\Private\Items\Flower.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -439,6 +444,9 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\MyWorld\Private\Items\Wateringcan.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MyWorld\Private\Managers\TextManager.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\MyWorld\Private\Player\WorldPlayer.cpp">
@@ -455,11 +463,13 @@
     <ClInclude Include="..\..\Source\MyWorld\Public\Interfaces\TouchingInterface.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\Candle.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\CandlePedestal.h"/>
+    <ClInclude Include="..\..\Source\MyWorld\Public\Items\Cartel.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\Flower.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\InteractItem.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\Rock.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\Tree.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Items\Wateringcan.h"/>
+    <ClInclude Include="..\..\Source\MyWorld\Public\Managers\TextManager.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Player\WorldPlayer.h"/>
     <ClInclude Include="..\..\Source\MyWorld\Public\Portal\Portal.h"/>
   </ItemGroup>

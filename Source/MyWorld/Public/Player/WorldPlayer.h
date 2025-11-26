@@ -35,7 +35,6 @@ public:
 	ACharacter* PlayerCharacter;
 	/* References */
 
-
 	/* References Interactable Objects */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
 	AInteractItem* OverlappingInteractItem = nullptr;
@@ -46,6 +45,25 @@ public:
 	/* References Interactable Objects */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
 	float IsInHand = 50;
+
+	/* Amount of Objects*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
+	int32 AmountOfRocks = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
+	int32 AmountOfFlowers = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
+	int32 AmountOfTrees = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
+	int32 AmountOfLights = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
+	int32 CurrentAmountOfRocks = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
+	int32 CurrentAmountOfFlowers = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
+	int32 CurrentAmountOfTrees = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
+	int32 CurrentAmountOfLights = 0;
+
 
 
 protected:
