@@ -398,11 +398,7 @@
     <None Include="..\..\MyWorld.uproject"/>
     <None Include="..\..\Source\MyWorld.Target.cs"/>
     <None Include="..\..\Source\MyWorldEditor.Target.cs"/>
-    <None Include="..\..\.gitattributes"/>
-    <None Include="..\..\.vsconfig"/>
     <None Include="..\..\README.md"/>
-    <None Include="..\..\Config\DefaultEngine.ini"/>
-    <None Include="..\..\Config\DefaultInput.ini"/>
     <None Include="..\..\Source\MyWorld\MyWorld.Build.cs"/>
     <ClCompile Include="..\..\Source\MyWorld\MyWorld.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
