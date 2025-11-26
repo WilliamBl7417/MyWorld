@@ -15,6 +15,13 @@ class UTextRenderComponent;
 class AWorldPlayer;
 class UPlaySoundAndParticles;
 
+UENUM(BlueprintType)
+enum class EBooleanOutputPin : uint8
+{
+	BO_PinTrue		UMETA(DisplayName = "True"),
+	BO_PinFalse		UMETA(DisplayName = "False")
+};
+
 
 
 UCLASS()
@@ -46,6 +53,14 @@ public:
 	/*Internal Functions*/
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
+
+
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, meta = (ExpandEnumAsExecs = "BranchResult"))
+	void CheckAlreadyChangeMat(int32 Valuetochange ,EBooleanOutputPin& BranchResult, int32& OutValue);
+
+	virtual void CheckAlreadyChangeMat_Implementation(int32 Valuetochange, EBooleanOutputPin& BranchResult, int32& OutValue);
+	
 	/*Functions*/
 
 

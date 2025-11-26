@@ -28,6 +28,16 @@ public:
 	void CallTouchingBP(AActor* ActorOverlap);
 	void CallWateringBP(AActor* ActorOverlap);
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Player Properties|Widget")
+	void SetAmountOfElementsToWidget(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
+
+	virtual void SetAmountOfElementsToWidget_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Player Properties|Widget")
+	void SetAmountOfElementsToPlayer(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
+
+	virtual void SetAmountOfElementsToPlayer_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
+
 	/* References */
 	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
 	AActor* OverlappingActor;

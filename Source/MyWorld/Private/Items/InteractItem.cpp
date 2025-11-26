@@ -115,6 +115,31 @@ void AInteractItem::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AInteractItem::CheckAlreadyChangeMat_Implementation(int32 Valuetochange, EBooleanOutputPin& BranchResult, int32& OutValue)
+{
+	if (AlreadyChangeMat)
+	{
+		BranchResult = EBooleanOutputPin::BO_PinTrue;
+		OutValue =  Valuetochange;
+	}
+	else
+	{
+		BranchResult = EBooleanOutputPin::BO_PinFalse;
+		if (Valuetochange > 0)
+		{
+			OutValue = Valuetochange - 1;
+		}
+		else
+		{
+			OutValue = Valuetochange;
+		}
+	}
+
+}
+
+
+
+
 void AInteractItem::DebugMes(int32 Key, FString Message, FColor Color, float Duration)
 {
 	if (GEngine)

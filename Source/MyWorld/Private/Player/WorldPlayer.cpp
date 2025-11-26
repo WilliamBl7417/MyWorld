@@ -103,6 +103,22 @@ void AWorldPlayer::CallWateringBP(AActor* ActorOverlap)
 	}
 }
 
+
+void AWorldPlayer::SetAmountOfElementsToWidget_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights)
+{
+	Rocks = CurrentAmountOfRocks;
+	Flowers = AmountOfFlowers;
+	Trees = AmountOfTrees;
+	Lights = AmountOfLights;
+	//SetAmountOfElementsToWidget(Rocks, Flowers, Trees, Lights);
+
+}
+
+void AWorldPlayer::SetAmountOfElementsToPlayer_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights)
+{
+	
+}
+
 void AWorldPlayer::BeginPlay()
 {
 	Super::BeginPlay();
