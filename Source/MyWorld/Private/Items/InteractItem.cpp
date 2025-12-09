@@ -105,11 +105,6 @@ void AInteractItem::CleanPlayerRef()
 	WorldPlayerRef = nullptr;
 }
 
-// InteractItem.cpp
-
-// InteractItem.cpp
-
-
 void AInteractItem::BeginPlay()
 {
 	Super::BeginPlay();

@@ -146,72 +146,57 @@ void AWorldPlayer::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* O
 
 	OverlappingActor = OtherActor;
 
-
 	if (OverlappingActor->IsA(AInteractItem::StaticClass()))
 	{
 		AInteractItem* NewInteractItem = Cast<AInteractItem>(OtherActor);
 
 		NewInteractItem->SavePlayerRef(this);
 
-		OverlappingInteractItem = NewInteractItem;
-
-		if (NewInteractItem->FindComponentByClass<UEquipableComponent>() && !ItemInHand)
+		if (bIsInHand == true && NewInteractItem->FindComponentByClass<UEquipableComponent>())//si ya tengo un objeto en la mano y el que estoy tocando es equipable, no hago nada
 		{
-			EquipableObject = NewInteractItem;
+			return;
 		}
-		if (NewInteractItem->IsA(ACandle::StaticClass()))
+		else if (bIsInHand == true && !NewInteractItem->FindComponentByClass< UEquipableComponent>())//si tengo un objeto en la mano y el que estoy tocando no es equipable, lo asigno como overlapping
 		{
-			ACandle* Candle = Cast<ACandle>(NewInteractItem);
-			if (Candle && Candle->bIsPlaced)
+			OverlappingInteractItem = NewInteractItem;
+		}
+		else if (bIsInHand == false && NewInteractItem->FindComponentByClass<UEquipableComponent>())//si no tengo nada en la mano y el objeto es equipable, lo asigno como overlapping
+		{
+			OverlappingInteractItem = NewInteractItem;
+		}
+		else if (bIsInHand == false && !NewInteractItem->FindComponentByClass<UEquipableComponent>())//
+		{
+			OverlappingInteractItem = NewInteractItem;
+		}
+
+		if (bIsInHand == false)
+		{
+			if (NewInteractItem->FindComponentByClass<UEquipableComponent>() && !ItemInHand)
 			{
-				EquipableObject = nullptr;
-				OverlappingInteractItem = nullptr;
+				EquipableObject = NewInteractItem;
 			}
-
+			if (NewInteractItem->IsA(ACandle::StaticClass()))
+			{
+				ACandle* Candle = Cast<ACandle>(NewInteractItem);
+				if (Candle && Candle->bIsPlaced)
+				{
+					EquipableObject = nullptr;
+					OverlappingInteractItem = nullptr;
+				}
+			}
 		}
-
-
 	}
 }
 
 void AWorldPlayer::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-
 	OverlappingActor = nullptr;
 	OverlappingInteractItem = nullptr;
 
 	if (!ItemInHand)
 	{
 		EquipableObject = nullptr;
-
 	}
-
-
-	//AInteractItem* EndedOverlapItem = Cast<AInteractItem>(OtherActor);
-
-	//if (IsValid(EndedOverlapItem))
-	//{
-	//	if (EndedOverlapItem->IsA(AWateringcan::StaticClass()))
-	//	{
-	//		if (EndedOverlapItem == OverlappingInteractItem)
-	//		{
-	//			OverlappingInteractItem = nullptr;
-
-	//		}
-	//		return;
-	//	}
-
-	//	if (EndedOverlapItem == OverlappingInteractItem)
-	//	{
-	//		if (!EndedOverlapItem->bIsInHand)
-	//		{
-	//			//EndedOverlapItem->CleanPlayerRef();
-	//			OverlappingInteractItem = nullptr;
-	//			DebugMessage(-1, FString::Printf(TEXT("End Overlap y limpieza de: %s"), *OtherActor->GetName()), FColor::Yellow, 2.f);
-	//		}
-	//	}
-	//}
-
 }
 
 void AWorldPlayer::MoveEvent(const FInputActionValue& Value)
@@ -244,6 +229,7 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		if (EquipableObject && EquipableObject->FindComponentByClass<UEquipableComponent>())
 		{
 			EquipableObject->TouchingBP_Implementation();
+			bIsInHand = EquipableObject->bIsInHand;
 		}
 	}
 	else if (!OverlappingInteractItem && ItemInHand)//suelo el objeto que tengo en la mano si no hay nada con lo que interactuar
@@ -251,6 +237,7 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		if (EquipableObject && EquipableObject->FindComponentByClass<UEquipableComponent>())
 		{
 			EquipableObject->TouchingBP_Implementation();
+			bIsInHand = EquipableObject->bIsInHand;
 		}
 	}
 	else if (!EquipableObject && OverlappingInteractItem)//si no tengo nada equipado y hay un objeto con el que interactuar, llamo a su BP

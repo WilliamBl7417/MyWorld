@@ -20,6 +20,7 @@ public:
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
 	UFUNCTION(BlueprintCallable, Category = "Wateringcan Logic")
 	void HandleAttachment();
 	UFUNCTION(BlueprintCallable, Category = "Wateringcan Logic")
@@ -32,11 +33,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipable Component")
 	AInteractItem* OwnerAsInsteactItem;
 
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Equipable Component")
 	AWorldPlayer* PlayerRef;
-
-
-
 
 protected:
 	

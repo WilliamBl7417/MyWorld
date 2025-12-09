@@ -55,6 +55,9 @@ public:
 	/* References Interactable Objects */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|References")
 	float IsInHand = 50;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Properties|References")
+	bool bIsInHand = false;
+
 
 	/* Amount of Objects*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
