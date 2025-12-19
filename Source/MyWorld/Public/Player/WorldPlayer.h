@@ -17,7 +17,7 @@ class AInteractItem;
 class AWateringcan;
 
 UCLASS()
-class MYWORLD_API AWorldPlayer : public ACharacter
+class MYWORLD_API AWorldPlayer  : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -37,6 +37,13 @@ public:
 	void SetAmountOfElementsToPlayer(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
 
 	virtual void SetAmountOfElementsToPlayer_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
+
+
+	/*Funcion for update data own spawnerBP*/
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Player Properties|References")
+	void UpdateSpawnerDataBP();
+	virtual void UpdateSpawnerDataBP_Implementation();
+
 
 	/* References */
 	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
@@ -78,6 +85,11 @@ public:
 	int32 CurrentAmountOfLights = 0;
 
 
+	// Camera Variables
+	UPROPERTY(EditAnywhere, Category = "Player Properties|Camera")
+	float LookSensitivity = 1.0f;
+
+
 
 protected:
 
@@ -91,6 +103,8 @@ protected:
 	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
 
 	/* Inputs // IMC Implementation*/
 	void MoveEvent(const FInputActionValue& Value);
@@ -111,6 +125,8 @@ protected:
 	void playMontageAnim(UAnimMontage* MontageToPlay);
 
 	void playMontageAnim_Implementation(UAnimMontage* MontageToPlay);
+;
+
 
 	/* Input */
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -150,11 +166,13 @@ protected:
 	USkeletalMeshComponent* ClothesMesh;
 
 	/* Camera Variables */
-	UPROPERTY(EditAnywhere, Category = "Player Properties|Camera")
-	float LookSensitivity = 1.0f;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|Tick")
 	float DeltaSeconds;
+
+
+
 
 
 

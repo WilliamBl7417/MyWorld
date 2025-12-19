@@ -49,6 +49,9 @@ protected:
 
 	/*Variables*/
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+	TArray<TSoftObjectPtr<UWorld>> Levels;
+
 
 
 public:	

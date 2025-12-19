@@ -103,7 +103,6 @@ void AWorldPlayer::CallWateringBP(AActor* ActorOverlap)
 	}
 }
 
-
 void AWorldPlayer::SetAmountOfElementsToWidget_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights)
 {
 	Rocks = CurrentAmountOfRocks;
@@ -115,6 +114,11 @@ void AWorldPlayer::SetAmountOfElementsToWidget_Implementation(int32 Rocks, int32
 }
 
 void AWorldPlayer::SetAmountOfElementsToPlayer_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights)
+{
+	
+}
+
+void AWorldPlayer::UpdateSpawnerDataBP_Implementation()
 {
 	
 }
@@ -230,6 +234,8 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		{
 			EquipableObject->TouchingBP_Implementation();
 			bIsInHand = EquipableObject->bIsInHand;
+			UpdateSpawnerDataBP(); 
+			//UpdateSpawnerDataBP_Implementation();
 		}
 	}
 	else if (!OverlappingInteractItem && ItemInHand)//suelo el objeto que tengo en la mano si no hay nada con lo que interactuar
@@ -238,11 +244,15 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		{
 			EquipableObject->TouchingBP_Implementation();
 			bIsInHand = EquipableObject->bIsInHand;
+			UpdateSpawnerDataBP(); 
+			//UpdateSpawnerDataBP_Implementation();
 		}
 	}
 	else if (!EquipableObject && OverlappingInteractItem)//si no tengo nada equipado y hay un objeto con el que interactuar, llamo a su BP
 	{
 		CallTouchingBP(OverlappingInteractItem);
+		UpdateSpawnerDataBP(); 
+		//UpdateSpawnerDataBP_Implementation();
 
 	}
 	else if (ItemInHand && OverlappingInteractItem)
@@ -251,10 +261,12 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 		{
 			if (GEngine)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Watering Plant"));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Watering Plant"));
 			}
 			CallWateringBP(OverlappingInteractItem);
 			CallWateringBP(ItemInHand);
+			UpdateSpawnerDataBP(); 
+			//UpdateSpawnerDataBP_Implementation();
 		}
 		else if (ItemInHand->IsA(ACandle::StaticClass()) && OverlappingInteractItem->IsA(ACandlePedestal::StaticClass()))
 		{
@@ -264,25 +276,28 @@ void AWorldPlayer::InteractEvent(const FInputActionValue& Value)
 			{
 				Candle->EquipableComponent->EquiptToCandlePedestal(Candle);
 				CandlePedestal->PlaceCandleBP_Implementation(Candle);
+				UpdateSpawnerDataBP(); 
+				//UpdateSpawnerDataBP_Implementation();
 			}
 		}
 		else if (ItemInHand->IsA(ACandle::StaticClass()) && OverlappingInteractItem->IsA(AInteractItem::StaticClass()))
 		{
 			CallTouchingBP(OverlappingInteractItem);
+			UpdateSpawnerDataBP(); 
+			//UpdateSpawnerDataBP_Implementation();
 		}
 		else if (ItemInHand->IsA(AWateringcan::StaticClass()) && OverlappingInteractItem->IsA(AInteractItem::StaticClass()) && !OverlappingInteractItem->IsA(AFlower::StaticClass()))
 		{
 			CallTouchingBP(OverlappingInteractItem);
+			UpdateSpawnerDataBP(); 
+			//UpdateSpawnerDataBP_Implementation();
 		}
+		
 	}
 }
 
 void AWorldPlayer::JumpEvent(const FInputActionValue& Value)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Jump Event Triggered"));
-	}
 }
 
 void AWorldPlayer::RunStart(const FInputActionValue& Value)
@@ -311,7 +326,7 @@ void AWorldPlayer::playMontageAnim_Implementation(UAnimMontage* MontageToPlay)
 	{
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MontageToPlay is nullptr"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MontageToPlay is nullptr"));
 		}
 		return;
 	}

@@ -24,5 +24,4 @@ void ATextManager::BeginPlay()
 
 	PlayerRef = Cast<AWorldPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
 
-	//WorldPlayerRef = Cast<AWorldPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
 }

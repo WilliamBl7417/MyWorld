@@ -147,4 +147,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
 	float DeltaSeconds;
 
+
+
 };
