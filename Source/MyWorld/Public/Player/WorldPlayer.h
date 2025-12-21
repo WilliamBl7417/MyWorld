@@ -38,12 +38,10 @@ public:
 
 	virtual void SetAmountOfElementsToPlayer_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
 
-
 	/*Funcion for update data own spawnerBP*/
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Player Properties|References")
 	void UpdateSpawnerDataBP();
 	virtual void UpdateSpawnerDataBP_Implementation();
-
 
 	/* References */
 	UPROPERTY(EditAnywhere, Category = "Player Properties|References")
@@ -145,6 +143,7 @@ protected:
 	// Control de aceleración correr caminar
 	UPROPERTY(EditAnywhere, Category = "Player Properties|Movement")
 	float SpeedInterpRate;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player Properties|Movement")
 	bool bIsRunning = false;
 
 	/* Movement Variables */

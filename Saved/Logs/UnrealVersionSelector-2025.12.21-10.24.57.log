@@ -1,4 +1,4 @@
-Log started at 12/19/2025 17:31:07 (2025-12-19T16:31:07Z)
+Log started at 12/21/2025 10:24:58 (2025-12-21T09:24:58Z)
 Resolved project argument D:/UEProjects/MyWorld/MyWorld.uproject to D:\UEProjects\MyWorld\MyWorld.uproject
 No config file at C:\ProgramData\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
 No config file at C:\Users\wludw\AppData\Local\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
@@ -9,7 +9,7 @@ No project scope config file at D:\UEProjects\MyWorld\Saved\UnrealBuildTool\Buil
 Reading configuration file from: C:\Users\wludw\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
 Reading configuration file from: D:\UEProjects\MyWorld\Saved\UnrealBuildTool\BuildConfiguration.xml
 Reading configuration file from: C:\Users\wludw\AppData\Local\UnrealEngine\Intermediate\Build\UnrealBuildTool.Env.BuildConfiguration.xml
-Log file: D:\UEProjects\MyWorld\Saved\Logs\UnrealVersionSelector-2025.12.19-17.31.07.log
+Log file: D:\UEProjects\MyWorld\Saved\Logs\UnrealVersionSelector-2025.12.21-10.24.57.log
 
 Setting temp directory to 'C:\Users\wludw\AppData\Local\Temp\UnrealBuildTool\5e8f9584'
     Registering build platform: UnrealBuildTool.AndroidPlatformFactory
@@ -78,7 +78,7 @@ Generating target Game for D:\UEProjects\MyWorld\Intermediate\ProjectFiles\MyWor
 Generating target Editor for D:\UEProjects\MyWorld\Intermediate\ProjectFiles\MyWorld.vcxproj
 Generating target Editor for D:\UEProjects\MyWorld\Intermediate\ProjectFiles\UE5.vcxproj
 Generating target Game for D:\UEProjects\MyWorld\Intermediate\ProjectFiles\UE5.vcxproj
-Adding projects for all targets took 9.48s
+Adding projects for all targets took 3.26s
 Adding projects for all game projects took 0.00s
 Adding shader source code...
 AddProjectsForAllModules D:\UnrealEngines\UE_5.6\Engine\Source\Developer\AITestSuite\AITestSuite.Build.cs
@@ -2337,7 +2337,7 @@ AddProjectsForAllModules D:\UnrealEngines\UE_5.6\Engine\Platforms\VisionOS\Plugi
 AddProjectsForAllModules D:\UnrealEngines\UE_5.6\Engine\Platforms\VisionOS\Plugins\Runtime\OpenXRVisionOS\Source\OXRVisionOSSettings\OXRVisionOSSettings.build.cs
 AddProjectsForAllModules D:\UnrealEngines\UE_5.6\Engine\Platforms\VisionOS\Plugins\Runtime\OpenXRVisionOS\Source\OXRVisionOS\OXRVisionOS.Build.cs
 AddProjectsForAllModules D:\UEProjects\MyWorld\Source\MyWorld\MyWorld.Build.cs
-Adding projects for all modules took 0.52s
+Adding projects for all modules took 0.37s
 Skipping any C# project files in "D:\UnrealEngines\UE_5.6\Engine\Platforms\VisionOS\Source\Programs" due to unsupported platform
 Compiling Rules Assemblies
 @progress 'Compiling Rules Assemblies' 0%
@@ -4080,6 +4080,10 @@ Excluding module ProfilerMessages: Does not support Obsolete 'Profiler is deprec
 Excluding module ProfilerService: Does not support Obsolete 'Profiler is deprecated since UE 5.0 - use Trace/UnrealInsights instead.'
 Excluding module AndroidAdvertising: Excluded folder name
 Excluding module IOSAdvertising: Excluded folder name
+Excluding module LaunchDaemonMessages: Excluded folder name
+Excluding module VisualStudioDTE: Not under compatible directories
+Excluding module LiveLinkHubLauncher: Not under compatible directories
+Excluding module DotNetPerforceLib: Not under compatible directories
 Allowed circular dependency for 'Source\Runtime\AIModule\AIModule.Build.cs' detected:
 * AIModule -> AITestSuite -> AIModule (allowed via AIModule -> AITestSuite)
 * AIModule -> Engine -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> DetailCustomizations -> ComponentVisualizers -> AIModule (allowed via Engine -> Kismet, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona, AudioEditor -> DetailCustomizations)
@@ -4101,7 +4105,6 @@ Allowed circular dependency for 'Source\Editor\ActorPickerMode\ActorPickerMode.B
 * ActorPickerMode -> UnrealEd -> FoliageEdit -> DetailCustomizations -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> LevelEditor -> ActorPickerMode (allowed via UnrealEd -> FoliageEdit, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona)
 Allowed circular dependency for 'Source\Editor\AddContentDialog\AddContentDialog.Build.cs' detected:
 * AddContentDialog -> UnrealEd -> AudioEditor -> DetailCustomizations -> SkeletonEditor -> AnimationWidgets -> GraphEditor -> Persona -> AnimationModifiers -> AnimationBlueprintLibrary -> AnimGraph -> ContentBrowser -> AddContentDialog (allowed via UnrealEd -> AddContentDialog, AudioEditor -> DetailCustomizations, GraphEditor -> Persona, AnimGraph -> ContentBrowser)
-Excluding module LaunchDaemonMessages: Excluded folder name
 * AddContentDialog -> Engine -> MaterialUtilities -> MaterialBaking -> MainFrame -> UATHelper -> GameProjectGeneration -> ClassViewer -> PropertyEditor -> CQTest -> LevelEditor -> KismetWidgets -> BlueprintGraph -> AssetTools -> Kismet -> UMGEditor -> DetailCustomizations -> SkeletonEditor -> AnimationWidgets -> GraphEditor -> Persona -> AnimationModifiers -> AnimationBlueprintLibrary -> AnimGraph -> ContentBrowser -> AddContentDialog (allowed via Engine -> MaterialUtilities, KismetWidgets -> BlueprintGraph, AssetTools -> Kismet, Kismet -> UMGEditor, GraphEditor -> Persona, AnimGraph -> ContentBrowser)
 Allowed circular dependency for 'Source\Editor\AdvancedPreviewScene\AdvancedPreviewScene.Build.cs' detected:
 * AdvancedPreviewScene -> Engine -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> DetailCustomizations -> AdvancedPreviewScene (allowed via Engine -> Kismet, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona, AudioEditor -> DetailCustomizations)
@@ -4141,7 +4144,6 @@ Allowed circular dependency for 'Source\Editor\AnimationModifiers\AnimationModif
 * AnimationModifiers -> Engine -> Landscape -> MeshUtilities -> LevelEditor -> KismetWidgets -> BlueprintGraph -> Kismet -> BlueprintEditorLibrary -> AnimGraph -> GraphEditor -> Persona -> AnimationModifiers (allowed via Engine -> Landscape, Landscape -> MeshUtilities, KismetWidgets -> BlueprintGraph, BlueprintGraph -> Kismet, AnimGraph -> GraphEditor, GraphEditor -> Persona)
 Allowed circular dependency for 'Source\Developer\AnimationWidgets\AnimationWidgets.Build.cs' detected:
 * AnimationWidgets -> GraphEditor -> Persona -> AudioEditor -> DetailCustomizations -> SkeletonEditor -> AnimationWidgets (allowed via GraphEditor -> Persona, AudioEditor -> DetailCustomizations)
-Excluding module VisualStudioDTE: Not under compatible directories
 * AnimationWidgets -> UnrealEd -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> BlueprintGraph -> AssetTools -> Landscape -> MeshUtilities -> Persona -> AudioEditor -> DetailCustomizations -> SkeletonEditor -> AnimationWidgets (allowed via UnrealEd -> MeshBuilder, AnimGraph -> BlueprintGraph, AssetTools -> Landscape, Landscape -> MeshUtilities, AudioEditor -> DetailCustomizations)
 * AnimationWidgets -> Engine -> Kismet -> UMGEditor -> Sequencer -> MovieSceneCaptureDialog -> MovieSceneTools -> AnimationBlueprintLibrary -> AnimGraph -> BlueprintGraph -> AssetTools -> Landscape -> MeshUtilities -> Persona -> AudioEditor -> DetailCustomizations -> SkeletonEditor -> AnimationWidgets (allowed via Engine -> Kismet, Kismet -> UMGEditor, Sequencer -> MovieSceneCaptureDialog, AnimGraph -> BlueprintGraph, AssetTools -> Landscape, Landscape -> MeshUtilities, AudioEditor -> DetailCustomizations)
 * AnimationWidgets -> PropertyEditor -> CQTest -> LevelEditor -> SubobjectEditor -> Kismet -> UMGEditor -> Sequencer -> MovieSceneCaptureDialog -> MovieSceneTools -> AnimationBlueprintLibrary -> AnimGraph -> BlueprintGraph -> AssetTools -> Landscape -> MeshUtilities -> Persona -> AudioEditor -> DetailCustomizations -> SkeletonEditor -> AnimationWidgets (allowed via Kismet -> SubobjectEditor, Sequencer -> MovieSceneCaptureDialog, AnimGraph -> BlueprintGraph, AssetTools -> Landscape, Landscape -> MeshUtilities, AudioEditor -> DetailCustomizations)
@@ -4166,7 +4168,6 @@ Allowed circular dependency for 'Source\Runtime\AudioMixer\AudioMixer.Build.cs' 
 * AudioMixer -> SoundFieldRendering -> AudioMixer (allowed via AudioMixer -> SoundFieldRendering)
 * AudioMixer -> HeadMountedDisplay -> Renderer -> MaterialShaderQualitySettings -> PropertyEditor -> CQTest -> LevelEditor -> ActionableMessage -> UnrealEd -> FoliageEdit -> DetailCustomizations -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> AudioMixer (allowed via UnrealEd -> FoliageEdit, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona)
 * AudioMixer -> Engine -> MaterialUtilities -> MaterialBaking -> MainFrame -> UATHelper -> GameProjectGeneration -> ClassViewer -> PropertyEditor -> CQTest -> LevelEditor -> ActionableMessage -> UnrealEd -> FoliageEdit -> DetailCustomizations -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> AudioMixer (allowed via Engine -> AudioMixer, UnrealEd -> FoliageEdit, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona)
-Excluding module LiveLinkHubLauncher: Not under compatible directories
 Allowed circular dependency for 'Source\Runtime\Windows\AudioMixerXAudio2\AudioMixerXAudio2.Build.cs' detected:
 * AudioMixerXAudio2 -> Engine -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> DetailCustomizations -> ComponentVisualizers -> AIModule -> UnrealEd -> AudioMixerXAudio2 (allowed via Engine -> Kismet, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona, AudioEditor -> DetailCustomizations)
 * AudioMixerXAudio2 -> AudioMixer -> HeadMountedDisplay -> Renderer -> MaterialShaderQualitySettings -> PropertyEditor -> CQTest -> LevelEditor -> SubobjectEditor -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> DetailCustomizations -> ComponentVisualizers -> AIModule -> UnrealEd -> AudioMixerXAudio2 (allowed via Kismet -> SubobjectEditor, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona, AudioEditor -> DetailCustomizations)
@@ -4181,7 +4182,6 @@ Allowed circular dependency for 'Source\Runtime\AutomationMessages\AutomationMes
 * AutomationMessages -> AutomationTest -> SourceControl -> EditorFramework -> Engine -> MaterialUtilities -> MaterialBaking -> MainFrame -> UATHelper -> GameProjectGeneration -> ClassViewer -> PropertyEditor -> CQTest -> LevelEditor -> ActionableMessage -> UnrealEd -> FoliageEdit -> DetailCustomizations -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> UMGEditor -> Blutility -> AutomationController -> AutomationMessages (allowed via Engine -> MaterialUtilities, UnrealEd -> FoliageEdit, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona, UMGEditor -> Blutility)
 Allowed circular dependency for 'Source\Runtime\AutomationTest\AutomationTest.Build.cs' detected:
 * AutomationTest -> SourceControl -> EditorFramework -> Engine -> MaterialUtilities -> MaterialBaking -> MainFrame -> UATHelper -> GameProjectGeneration -> ClassViewer -> PropertyEditor -> CQTest -> LevelEditor -> ActionableMessage -> UnrealEd -> FoliageEdit -> DetailCustomizations -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> UMGEditor -> Blutility -> AutomationController -> AutomationTest (allowed via Engine -> MaterialUtilities, UnrealEd -> FoliageEdit, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona, UMGEditor -> Blutility)
-Excluding module DotNetPerforceLib: Not under compatible directories
 Allowed circular dependency for 'Source\Developer\BSPUtils\BSPUtils.Build.cs' detected:
 * BSPUtils -> Engine -> MaterialUtilities -> MaterialBaking -> MainFrame -> UATHelper -> GameProjectGeneration -> ClassViewer -> PropertyEditor -> ActorPickerMode -> UnrealEd -> FoliageEdit -> DetailCustomizations -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> LevelEditor -> HierarchicalLODOutliner -> HierarchicalLODUtilities -> BSPUtils (allowed via Engine -> MaterialUtilities, UnrealEd -> FoliageEdit, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona)
 Allowed circular dependency for 'Source\Editor\BlueprintEditorLibrary\BlueprintEditorLibrary.Build.cs' detected:
@@ -5651,7 +5651,7 @@ Allowed circular dependency for 'Source\Editor\ZenEditor\ZenEditor.Build.cs' det
 * ZenEditor -> UnrealEd -> FoliageEdit -> DetailCustomizations -> Kismet -> BlueprintEditorLibrary -> BlueprintGraph -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> LevelEditor -> ZenEditor (allowed via UnrealEd -> FoliageEdit, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona)
 * ZenEditor -> UATHelper -> GameProjectGeneration -> ClassViewer -> PropertyEditor -> Documentation -> ContentBrowser -> AssetTools -> Landscape -> MeshBuilder -> MeshBoneReduction -> AnimationBlueprintLibrary -> AnimGraph -> GraphEditor -> Persona -> AudioEditor -> LevelEditor -> ZenEditor (allowed via Documentation -> ContentBrowser, AssetTools -> Landscape, AnimGraph -> GraphEditor, GraphEditor -> Persona)
 @progress 'Creating Build Targets' 100%
-Creating Build Targets took 1.69s
+Creating Build Targets took 2.46s
 Binding IntelliSense data...
 @progress 'Binding IntelliSense data...' 0%
 Compiler: D:\Visual studio\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe
@@ -5774,21 +5774,21 @@ Found 5 shared PCH headers (listed in order of preference):
 @progress 'Binding IntelliSense data...' 98%
 @progress 'Binding IntelliSense data...' 99%
 @progress 'Binding IntelliSense data...' 100%
-Binding IntelliSense data took 29.85s
+Binding IntelliSense data took 43.03s
 Writing project files...
 @progress 'Writing project files...' 0%
-Saved MyWorld.vcxproj
-Saved MyWorld.vcxproj.filters
-Saved MyWorld.vcxproj.user
-@progress 'Writing project files...' 33%
 Saved UE5.vcxproj
 Saved UE5.vcxproj.filters
 Saved UE5.vcxproj.user
+@progress 'Writing project files...' 33%
+Saved MyWorld.vcxproj
+Saved MyWorld.vcxproj.filters
+Saved MyWorld.vcxproj.user
 @progress 'Writing project files...' 67%
 Saved MyWorld.sln
-Saved .vsconfig
+Skipped saving .vsconfig because contents haven't changed.
 @progress 'Writing project files...' 100%
-Writing project files took 1.51s
+Writing project files took 1.70s
 Project generation complete (2 generated, 51 imported)
 
 Generating QueryTargets data for editor...
@@ -5800,31 +5800,32 @@ Writing Query Target Info
 @progress 'Writing Query Target Info' 0%
 @progress 'Writing Query Target Info' 50%
 @progress 'Writing Query Target Info' 100%
-Generating QueryTargets data for editor took 0.02s
+Generating QueryTargets data for editor took 0.03s
 WriteFileIfChanged() wrote 31 changed files of 2050 requested writes.
 
 Timeline:
-[  0.000]  +0.414 Main
-   0.085          [  0.085]  +0.217 Apply XmlConfig
-   0.336          [  0.335]  +0.078 RegisterPlatforms
-[  0.415] +44.349 GenerateProjectFilesMode
-   0.415          [  0.000]  +0.290 <unknown>
-   0.705          [  0.290] +44.032 Generating VisualStudio project files
-   0.781             0.366          [  0.075]  +0.021 DiscoverTargets
-   0.806             0.391          [  0.101]  +9.482 Adding projects for all targets
-  10.291             9.875          [  9.585]  +0.001 Adding projects for all game projects
-  10.292             9.877          [  9.587]  +0.015 Adding Engine Source
-  10.313             9.898          [  9.608]  +0.523 Adding projects for all modules
-  10.837            10.422          [ 10.131]  +0.839 Adding DotNet Programs
-  11.681            11.265          [ 10.975]  +0.003 Compiling Rules Assemblies
-  11.684            11.268          [ 10.978]  +1.693 Creating Build Targets
-  13.378            12.962          [ 12.672] +29.845 Binding IntelliSense data
-  43.223            42.808          [ 42.518]  +1.514 Writing project files
-  44.739          [ 44.324]  +0.024 Generating QueryTargets data for editor
-  44.739            44.324          [  0.000]  +0.000 Compiling Rules Assemblies
-  44.740            44.325          [  0.001]  +0.023 Writing Query Target Info
-[ 44.764]  +0.000 TelemetryService.FlushEvents
-[ 44.765]
+[  0.000]  +1.564 Main
+   0.000          [  0.000]  +0.868 <unknown>
+   0.868          [  0.868]  +0.566 Apply XmlConfig
+   1.478          [  1.477]  +0.086 RegisterPlatforms
+[  1.564] +52.624 GenerateProjectFilesMode
+   1.564          [  0.000]  +0.328 <unknown>
+   1.893          [  0.328] +52.266 Generating VisualStudio project files
+   2.039             0.474          [  0.145]  +0.025 DiscoverTargets
+   2.069             0.504          [  0.175]  +3.255 Adding projects for all targets
+   5.326             3.761          [  3.432]  +0.001 Adding projects for all game projects
+   5.328             3.763          [  3.434]  +0.011 Adding Engine Source
+   5.347             3.782          [  3.453]  +0.374 Adding projects for all modules
+   5.722             4.157          [  3.828]  +1.242 Adding DotNet Programs
+   6.968             5.403          [  5.074]  +0.002 Compiling Rules Assemblies
+   6.971             5.406          [  5.077]  +2.459 Creating Build Targets
+   9.431             7.866          [  7.537] +43.025 Binding IntelliSense data
+  52.457            50.892          [ 50.563]  +1.703 Writing project files
+  54.161          [ 52.596]  +0.028 Generating QueryTargets data for editor
+  54.161            52.596          [  0.000]  +0.000 Compiling Rules Assemblies
+  54.162            52.597          [  0.000]  +0.027 Writing Query Target Info
+[ 54.189]  +0.000 TelemetryService.FlushEvents
+[ 54.191]
 
 Result: Succeeded
-Total execution time: 44.77 seconds
+Total execution time: 54.19 seconds

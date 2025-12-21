@@ -11,6 +11,7 @@
 #include "NiagaraComponent.h"
 #include "Player/WorldPlayer.h"
 #include "Components/PlaySoundAndParticles.h"
+#include "Blueprint/UserWidget.h"
 
 AInteractItem::AInteractItem()
 {
@@ -39,9 +40,7 @@ AInteractItem::AInteractItem()
 
 	ObjectEfects = CreateDefaultSubobject<UPlaySoundAndParticles>(TEXT("ObjectEfects"));
 
-
 	WorldPlayerRef = nullptr;
-
 }
 
 
@@ -129,11 +128,48 @@ void AInteractItem::CheckAlreadyChangeMat_Implementation(int32 Valuetochange, EB
 			OutValue = Valuetochange;
 		}
 	}
+}
 
+void AInteractItem::SetUserFeedbackVisuals_Implementation(float FeedbackDisplayDuration)
+{
+	// 1. Verificamos que se haya asignado la clase del Widget en el Blueprint
+	if (!FeedbackWidgetClass) return;
+
+	// 2. Limpieza de seguridad: si ya hay uno, lo quitamos y cancelamos el timer anterior
+	if (CurrentActiveWidget)
+	{
+		GetWorldTimerManager().ClearTimer(TimerHandle_WidgetDestruction);
+		RemoveFeedbackWidget();
+	}
+
+	// 3. Crear la instancia del Widget
+	CurrentActiveWidget = CreateWidget<UUserWidget>(GetWorld(), FeedbackWidgetClass);
+
+	if (CurrentActiveWidget)
+	{
+		// 4. Mostrar en pantalla
+		CurrentActiveWidget->AddToViewport();
+
+		// 5. Programar la eliminación automática
+		GetWorldTimerManager().SetTimer(
+			TimerHandle_WidgetDestruction,
+			this,
+			&AInteractItem::RemoveFeedbackWidget,
+			FeedbackDisplayDuration,
+			false
+		);
+	}
 }
 
 
-
+void AInteractItem::RemoveFeedbackWidget()
+{
+	if (CurrentActiveWidget)
+	{
+		CurrentActiveWidget->RemoveFromParent();
+		CurrentActiveWidget = nullptr;
+	}
+}
 
 void AInteractItem::DebugMes(int32 Key, FString Message, FColor Color, float Duration)
 {

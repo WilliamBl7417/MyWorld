@@ -50,6 +50,16 @@ protected:
 	);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction | Sounds N Particles")
+	void PlayOnlyParticles(UNiagaraSystem* ParticlesToPlay,
+		USceneComponent* AttachComponent,
+		FName SocketName,
+		FVector LocationOverride,
+		FVector Scale,
+		bool bAttach,
+		UNiagaraComponent*& OutNiagaraComponent
+	);
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction | Sounds N Particles")
 	void DestroyCurrentParticles();
 
 public:

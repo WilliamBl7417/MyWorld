@@ -14,6 +14,8 @@ class UBoxComponent;
 class UTextRenderComponent;
 class AWorldPlayer;
 class UPlaySoundAndParticles;
+class UUserWidget;
+
 
 UENUM(BlueprintType)
 enum class EBooleanOutputPin : uint8
@@ -61,6 +63,7 @@ public:
 
 	virtual void CheckAlreadyChangeMat_Implementation(int32 Valuetochange, EBooleanOutputPin& BranchResult, int32& OutValue);
 	
+
 	/*Functions*/
 
 
@@ -147,6 +150,30 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
 	float DeltaSeconds;
 
+
+
+	protected:
+
+		// User Feedback Visuals
+		UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = " Properties | Interaction ")
+		void SetUserFeedbackVisuals(float FeedbackDisplayDuration);
+
+		virtual void SetUserFeedbackVisuals_Implementation(float FeedbackDisplayDuration);
+
+
+		UFUNCTION()
+		void RemoveFeedbackWidget();
+
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
+		TSubclassOf<UUserWidget> FeedbackWidgetClass;
+
+		// Referencia al widget activo para poder borrarlo
+		UPROPERTY()
+		UUserWidget* CurrentActiveWidget;
+
+		// Manejador del tiempo para la destrucción
+		FTimerHandle TimerHandle_WidgetDestruction;
 
 
 };

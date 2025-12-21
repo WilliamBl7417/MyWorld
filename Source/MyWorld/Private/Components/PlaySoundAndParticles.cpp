@@ -1,17 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Components/PlaySoundAndParticles.h"
-#include "Kismet/GameplayStatics.h" // For PlaySoundAtLocation
-#include "NiagaraFunctionLibrary.h" // For SpawnSystemAttached/AtLocation
-#include "NiagaraComponent.h"       // FIX: Added for UNiagaraComponent definition (Error C2027)
-#include "Items/InteractItem.h"       // FIX: Added to cast GetOwner() (Errors C2446, C2065)
-#include "Components/SkeletalMeshComponent.h" // Required for component types in the function
-#include "Components/StaticMeshComponent.h"   // Required for component types in the function
-#include "Components/SceneComponent.h"        // Required for component types in the function
+#include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"      
+#include "Items/InteractItem.h"    
+#include "Components/SkeletalMeshComponent.h" 
+#include "Components/StaticMeshComponent.h"  
+#include "Components/SceneComponent.h"       
 
 
-// Sets default values for this component's properties
 UPlaySoundAndParticles::UPlaySoundAndParticles()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -57,7 +53,8 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 		// Eliminar cualquier sistema de partículas anterior antes de spawnear uno nuevo
 		if (CurrentNiagaraComponent)
 		{
-			DestroyCurrentParticles();
+			DestroyCurrentParticles();//valorar si tengo que elimarlo aqui
+
 
 		}
 
@@ -70,7 +67,6 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 
 		// --- a. Get the target components ---
 
-		// FIX: Reemplazar la lógica de 'TargetActor == this'
 		AInteractItem* OwnerAsInteractItem = Cast<AInteractItem>(GetOwner());
 
 		// Si el TargetActor es el Actor dueño de este componente
@@ -161,6 +157,67 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 	}
 }
 
+void UPlaySoundAndParticles::PlayOnlyParticles(
+	UNiagaraSystem* ParticlesToPlay,
+	USceneComponent* AttachComponent,
+	FName SocketName,
+	FVector LocationOverride,
+	FVector Scale,
+	bool bAttach,
+	UNiagaraComponent*& OutNiagaraComponent
+)
+{
+	if (!ParticlesToPlay)
+	{
+		OutNiagaraComponent = nullptr;
+		return;
+	}
+
+	// Validación de escala: Si es (0,0,0), la ponemos a (1,1,1) para que sea visible
+	FVector FinalScale = Scale.IsNearlyZero() ? FVector(1.f) : Scale;
+
+	UNiagaraComponent* NewParticles = nullptr;
+
+	if (bAttach && AttachComponent)
+	{
+		NewParticles = UNiagaraFunctionLibrary::SpawnSystemAttached(
+			ParticlesToPlay,
+			AttachComponent,
+			SocketName,
+			LocationOverride,
+			FRotator::ZeroRotator,
+			EAttachLocation::KeepRelativeOffset,
+			true,
+			true,
+			ENCPoolMethod::AutoRelease,
+			true
+		);
+
+		// Aplicamos la escala después de atachar
+		if (NewParticles)
+		{
+			NewParticles->SetRelativeScale3D(FinalScale);
+		}
+	}
+	else
+	{
+		FVector SpawnLocation = AttachComponent ? AttachComponent->GetComponentLocation() : LocationOverride;
+
+		NewParticles = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			ParticlesToPlay,
+			SpawnLocation,
+			FRotator::ZeroRotator,
+			FinalScale, // Aquí se aplica directamente en el Spawn
+			true,
+			true,
+			ENCPoolMethod::AutoRelease,
+			true
+		);
+	}
+
+	OutNiagaraComponent = NewParticles;
+}
 void UPlaySoundAndParticles::DestroyCurrentParticles()
 {
 	if (CurrentNiagaraComponent)
