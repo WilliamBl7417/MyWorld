@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -16,7 +14,6 @@ class AWorldPlayer;
 class UPlaySoundAndParticles;
 class UUserWidget;
 
-
 UENUM(BlueprintType)
 enum class EBooleanOutputPin : uint8
 {
@@ -24,15 +21,12 @@ enum class EBooleanOutputPin : uint8
 	BO_PinFalse		UMETA(DisplayName = "False")
 };
 
-
-
 UCLASS()
 class MYWORLD_API AInteractItem : public AActor, public ITouchingInterface
 {
 	GENERATED_BODY()
 
 public:
-
 
 	/*Functions*///
 	AInteractItem();
@@ -47,22 +41,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Interaction | PlayerRef")
 	void CleanPlayerRef();
 
-	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interaction | Material")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction | Material")
 	void ChangeMaterialInteraction();
 
 	virtual void ChangeMaterialInteraction_Implementation();
-	
+
 	/*Internal Functions*/
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
-
-
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, meta = (ExpandEnumAsExecs = "BranchResult"))
-	void CheckAlreadyChangeMat(int32 Valuetochange ,EBooleanOutputPin& BranchResult, int32& OutValue);
+	void CheckAlreadyChangeMat(int32 Valuetochange, EBooleanOutputPin& BranchResult, int32& OutValue);
 
 	virtual void CheckAlreadyChangeMat_Implementation(int32 Valuetochange, EBooleanOutputPin& BranchResult, int32& OutValue);
-	
 
 	/*Functions*/
 
@@ -70,7 +61,7 @@ public:
 	/*Variables*/
 
 	/* Components*/
-	UPROPERTY(VisibleDefaultsOnly,BlueprintReadWrite, Category = "Components |")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components |")
 	USceneComponent* SceneComponent;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components |")
 	UTextRenderComponent* TextRender;
@@ -104,7 +95,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Material dynamic")
 	FName MaterialParameterName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Material dynamic")
-	bool AlreadyChangeMat = false; 
+	bool AlreadyChangeMat = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties | Const")
 	FVector InitialScale;
@@ -131,7 +122,7 @@ public:
 
 	/*Functions*/
 
-	protected:
+protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Animation | Rates")
 	void SetAnimRatePlay(FVector WorldScale,
@@ -150,30 +141,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Delta")
 	float DeltaSeconds;
 
+	// User Feedback Visuals
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = " Properties | Interaction ")
+	void SetUserFeedbackVisuals(float FeedbackDisplayDuration);
+
+	virtual void SetUserFeedbackVisuals_Implementation(float FeedbackDisplayDuration);
 
 
-	protected:
-
-		// User Feedback Visuals
-		UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = " Properties | Interaction ")
-		void SetUserFeedbackVisuals(float FeedbackDisplayDuration);
-
-		virtual void SetUserFeedbackVisuals_Implementation(float FeedbackDisplayDuration);
+	UFUNCTION()
+	void RemoveFeedbackWidget();
 
 
-		UFUNCTION()
-		void RemoveFeedbackWidget();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
+	TSubclassOf<UUserWidget> FeedbackWidgetClass;
 
-
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
-		TSubclassOf<UUserWidget> FeedbackWidgetClass;
-
-		// Referencia al widget activo para poder borrarlo
-		UPROPERTY()
-		UUserWidget* CurrentActiveWidget;
-
-		// Manejador del tiempo para la destrucción
-		FTimerHandle TimerHandle_WidgetDestruction;
+	static UUserWidget* GlobalActiveWidget;
+	static FTimerHandle GlobalTimerHandle;
 
 
 };

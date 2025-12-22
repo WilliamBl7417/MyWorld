@@ -13,6 +13,9 @@
 #include "Components/PlaySoundAndParticles.h"
 #include "Blueprint/UserWidget.h"
 
+UUserWidget* AInteractItem::GlobalActiveWidget = nullptr;
+FTimerHandle AInteractItem::GlobalTimerHandle;
+
 AInteractItem::AInteractItem()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -41,6 +44,8 @@ AInteractItem::AInteractItem()
 	ObjectEfects = CreateDefaultSubobject<UPlaySoundAndParticles>(TEXT("ObjectEfects"));
 
 	WorldPlayerRef = nullptr;
+
+
 }
 
 
@@ -52,17 +57,17 @@ void AInteractItem::WateringPlantBP_Implementation()
 {
 }
 
-void AInteractItem::SetAnimRatePlay(FVector WorldScale, 
+void AInteractItem::SetAnimRatePlay(FVector WorldScale,
 	float RPB_Min,
 	float RPB_Max,
-	float RPM_Min, 
-	float RPM_Max, 
-	float RPS_Min, 
+	float RPM_Min,
+	float RPM_Max,
+	float RPS_Min,
 	float RPS_Max,
 	float MeshSizeB,
 	float MeshSizeM,
 	float MeshSizeS
-	)
+)
 {
 	// Tomamos el menor de los tres ejes como referencia
 	float MinAxis = FMath::Min3(WorldScale.X, WorldScale.Y, WorldScale.Z);
@@ -114,7 +119,7 @@ void AInteractItem::CheckAlreadyChangeMat_Implementation(int32 Valuetochange, EB
 	if (AlreadyChangeMat)
 	{
 		BranchResult = EBooleanOutputPin::BO_PinTrue;
-		OutValue =  Valuetochange;
+		OutValue = Valuetochange;
 	}
 	else
 	{
@@ -132,27 +137,30 @@ void AInteractItem::CheckAlreadyChangeMat_Implementation(int32 Valuetochange, EB
 
 void AInteractItem::SetUserFeedbackVisuals_Implementation(float FeedbackDisplayDuration)
 {
-	// 1. Verificamos que se haya asignado la clase del Widget en el Blueprint
 	if (!FeedbackWidgetClass) return;
 
-	// 2. Limpieza de seguridad: si ya hay uno, lo quitamos y cancelamos el timer anterior
-	if (CurrentActiveWidget)
+	// 1. Limpieza de seguridad
+	if (GlobalActiveWidget)
 	{
-		GetWorldTimerManager().ClearTimer(TimerHandle_WidgetDestruction);
-		RemoveFeedbackWidget();
+		GetWorldTimerManager().ClearTimer(GlobalTimerHandle);
+
+		// Antes de remover, quitamos la protección del GC
+		GlobalActiveWidget->RemoveFromRoot();
+		GlobalActiveWidget->RemoveFromParent();
+		GlobalActiveWidget = nullptr;
 	}
 
-	// 3. Crear la instancia del Widget
-	CurrentActiveWidget = CreateWidget<UUserWidget>(GetWorld(), FeedbackWidgetClass);
+	// 2. Crear el nuevo widget
+	GlobalActiveWidget = CreateWidget<UUserWidget>(GetWorld(), FeedbackWidgetClass);
 
-	if (CurrentActiveWidget)
+	if (GlobalActiveWidget)
 	{
-		// 4. Mostrar en pantalla
-		CurrentActiveWidget->AddToViewport();
+		// IMPORTANTE: Evita que el GC borre el widget aunque sea estático
+		GlobalActiveWidget->AddToRoot();
+		GlobalActiveWidget->AddToViewport();
 
-		// 5. Programar la eliminación automática
 		GetWorldTimerManager().SetTimer(
-			TimerHandle_WidgetDestruction,
+			GlobalTimerHandle,
 			this,
 			&AInteractItem::RemoveFeedbackWidget,
 			FeedbackDisplayDuration,
@@ -164,10 +172,11 @@ void AInteractItem::SetUserFeedbackVisuals_Implementation(float FeedbackDisplayD
 
 void AInteractItem::RemoveFeedbackWidget()
 {
-	if (CurrentActiveWidget)
+	if (GlobalActiveWidget)
 	{
-		CurrentActiveWidget->RemoveFromParent();
-		CurrentActiveWidget = nullptr;
+		GlobalActiveWidget->RemoveFromRoot();
+		GlobalActiveWidget->RemoveFromParent();
+		GlobalActiveWidget = nullptr;
 	}
 }
 
@@ -186,4 +195,3 @@ void AInteractItem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	DeltaSeconds = DeltaTime;
 }
-
