@@ -106,16 +106,35 @@ void AWorldPlayer::CallWateringBP(AActor* ActorOverlap)
 void AWorldPlayer::SetAmountOfElementsToWidget_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights)
 {
 	Rocks = CurrentAmountOfRocks;
-	Flowers = AmountOfFlowers;
-	Trees = AmountOfTrees;
-	Lights = AmountOfLights;
+	Flowers = CurrentAmountOfFlowers;
+	Trees = CurrentAmountOfTrees;
+	Lights = CurrentAmountOfLights;
 	//SetAmountOfElementsToWidget(Rocks, Flowers, Trees, Lights);
 
 }
 
 void AWorldPlayer::SetAmountOfElementsToPlayer_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights)
 {
-	
+	// 1. Guardamos los valores totales en el jugador
+	AmountOfRocks = Rocks;
+	AmountOfFlowers = Flowers;
+	AmountOfTrees = Trees;
+	AmountOfLights = Lights;
+
+	CurrentAmountOfFlowers = Flowers;
+	CurrentAmountOfRocks = Rocks;
+	CurrentAmountOfTrees = Trees;
+	CurrentAmountOfLights = Lights;
+
+	// 2. Llamamos a la función que actualiza el Widget 
+	// (Pasamos los totales o los actuales según necesite tu UI)
+	SetAmountOfElementsToWidget(AmountOfRocks, AmountOfFlowers, AmountOfTrees, AmountOfLights);
+
+	if (GEngine)
+	{
+		///GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Player Elements Set: Rocks: %d, Flowers: %d, Trees: %d, Lights: %d"), Rocks, Flowers, Trees, Lights));
+
+	}
 }
 
 void AWorldPlayer::UpdateSpawnerDataBP_Implementation()

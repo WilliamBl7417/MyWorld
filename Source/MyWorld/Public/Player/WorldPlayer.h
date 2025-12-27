@@ -30,7 +30,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Player Properties|Widget")
 	void SetAmountOfElementsToWidget(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
-
 	virtual void SetAmountOfElementsToWidget_Implementation(int32 Rocks, int32 Flowers, int32 Trees, int32 Lights);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Player Properties|Widget")

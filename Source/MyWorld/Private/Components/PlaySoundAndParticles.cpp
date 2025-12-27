@@ -1,4 +1,4 @@
-#include "Components/PlaySoundAndParticles.h"
+ï»¿#include "Components/PlaySoundAndParticles.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"      
@@ -33,7 +33,7 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 	UNiagaraComponent*& OutNiagaraComponent
 )
 {
-	// Si TargetActor es null, usa el dueño del componente
+	// Si TargetActor es null, usa el dueÃ±o del componente
 	if (!TargetActor)
 	{
 		TargetActor = GetOwner();
@@ -42,15 +42,21 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 
 	if (SoundToPlay)
 	{
-		// Se usa TargetActor en lugar de GetActorLocation()
-		FVector SoundLocation = TargetActor->GetActorLocation();
-		UGameplayStatics::PlaySoundAtLocation(this, SoundToPlay, SoundLocation);
+		if (AInteractItem* InteractItem = Cast<AInteractItem>(TargetActor))
+		{
+			if (InteractItem->ShoulPlaySound) // â† aquÃ­ lees el UPROPERTY
+			{
+				FVector SoundLocation = TargetActor->GetActorLocation();
+				UGameplayStatics::PlaySoundAtLocation(this, SoundToPlay, SoundLocation);
+			}
+		}
 	}
+
 
 	// 2. Handle particles
 	if (ParticlesToPlay && TargetActor)
 	{
-		// Eliminar cualquier sistema de partículas anterior antes de spawnear uno nuevo
+		// Eliminar cualquier sistema de partÃ­culas anterior antes de spawnear uno nuevo
 		if (CurrentNiagaraComponent)
 		{
 			DestroyCurrentParticles();//valorar si tengo que elimarlo aqui
@@ -69,10 +75,10 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 
 		AInteractItem* OwnerAsInteractItem = Cast<AInteractItem>(GetOwner());
 
-		// Si el TargetActor es el Actor dueño de este componente
+		// Si el TargetActor es el Actor dueÃ±o de este componente
 		if (TargetActor == GetOwner() && OwnerAsInteractItem) // FIX: Uso de GetOwner() y Cast
 		{
-			// Acceder a las propiedades públicas de AInteractItem
+			// Acceder a las propiedades pÃºblicas de AInteractItem
 			TargetSkeletalMesh = OwnerAsInteractItem->SkeletalMeshComp;
 
 			if (OwnerAsInteractItem->StaticMeshAttachPoint)
@@ -85,7 +91,7 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 				TargetStaticAttachComp = OwnerAsInteractItem->StaticMeshComp;
 			}
 		}
-		else // Lógica original para cualquier otro actor (incluyendo el dueño si el cast falla, aunque no debería)
+		else // LÃ³gica original para cualquier otro actor (incluyendo el dueÃ±o si el cast falla, aunque no deberÃ­a)
 		{
 
 			TargetSkeletalMesh = TargetActor->FindComponentByClass<USkeletalMeshComponent>();
@@ -132,7 +138,7 @@ void UPlaySoundAndParticles::PlaySoundAndParticles(
 		// --- d. Fallback: spawn at location ---
 		if (!bAttached)
 		{
-			// Usar la ubicación del TargetActor como fallback
+			// Usar la ubicaciÃ³n del TargetActor como fallback
 			FVector SpawnLocation = LocationOverride.IsNearlyZero() ? TargetActor->GetActorLocation() : LocationOverride;
 			FRotator SpawnRotation = RotationOverride.IsZero() ? FRotator::ZeroRotator : RotationOverride;
 			FVector SpawnScale = ScaleOverride.IsNearlyZero() ? FVector(1.f) : ScaleOverride;
@@ -173,7 +179,7 @@ void UPlaySoundAndParticles::PlayOnlyParticles(
 		return;
 	}
 
-	// Validación de escala: Si es (0,0,0), la ponemos a (1,1,1) para que sea visible
+	// ValidaciÃ³n de escala: Si es (0,0,0), la ponemos a (1,1,1) para que sea visible
 	FVector FinalScale = Scale.IsNearlyZero() ? FVector(1.f) : Scale;
 
 	UNiagaraComponent* NewParticles = nullptr;
@@ -193,7 +199,7 @@ void UPlaySoundAndParticles::PlayOnlyParticles(
 			true
 		);
 
-		// Aplicamos la escala después de atachar
+		// Aplicamos la escala despuÃ©s de atachar
 		if (NewParticles)
 		{
 			NewParticles->SetRelativeScale3D(FinalScale);
@@ -208,7 +214,7 @@ void UPlaySoundAndParticles::PlayOnlyParticles(
 			ParticlesToPlay,
 			SpawnLocation,
 			FRotator::ZeroRotator,
-			FinalScale, // Aquí se aplica directamente en el Spawn
+			FinalScale, // AquÃ­ se aplica directamente en el Spawn
 			true,
 			true,
 			ENCPoolMethod::AutoRelease,

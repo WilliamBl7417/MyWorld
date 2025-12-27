@@ -23,15 +23,25 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	//void UpdateTextManagerDataBP();
+	//virtual void UpdateTextManagerDataBP_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void PlaysoundWhenItemCollectedBP(int32 Totalobject, int32 CurrentObjects);
+	virtual void PlaysoundWhenItemCollectedBP_Implementation(int32 Totalobject, int32 CurrentObjects);
+
 	/* Amount of Objects*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
-	ARock* AmountOfRocks = 0;
+	int32 AmountOfRocks = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
-	AFlower* AmountOfFlowers = 0;
+	int32 AmountOfFlowers = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
-	ATree* AmountOfTrees = 0;
+	int32 AmountOfTrees = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "References | Amount of Objects")
 	int32 AmountOfLights = 0;
+
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Text Manager things | References")
 	AWorldPlayer* PlayerRef;
@@ -40,5 +50,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+;
+	
 
 };

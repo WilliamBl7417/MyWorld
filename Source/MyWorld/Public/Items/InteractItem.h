@@ -57,7 +57,6 @@ public:
 
 	/*Functions*/
 
-
 	/*Variables*/
 
 	/* Components*/
@@ -100,13 +99,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Properties | Const")
 	FVector InitialScale;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
 	bool bImplementTouching = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
 	bool bImplementWhatering = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
 	bool bIsInHand = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
+	bool ShoulPlaySound = true;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Attaching")
@@ -116,8 +116,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties | References")
 	AWorldPlayer* WorldPlayerRef;
-
-
 	/*Variables*/
 
 	/*Functions*/
@@ -147,10 +145,8 @@ protected:
 
 	virtual void SetUserFeedbackVisuals_Implementation(float FeedbackDisplayDuration);
 
-
 	UFUNCTION()
 	void RemoveFeedbackWidget();
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties | Interaction")
 	TSubclassOf<UUserWidget> FeedbackWidgetClass;
